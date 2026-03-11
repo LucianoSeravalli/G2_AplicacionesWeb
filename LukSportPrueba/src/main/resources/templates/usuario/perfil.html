@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mi Perfil | Luk Sport Center</title>
+
+        <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    </head>
+    <body>
+
+        <div th:replace="~{general/fragmentosGeneral :: header}"></div>
+
+        <main class="main-content perfil-main">
+            <div class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+
+                        <div class="card shadow-lg border-0 rounded-4 perfil-card">
+                            <div class="card-header text-white perfil-header">
+                                <h2 class="mb-0">
+                                    <i class="fa-solid fa-id-card me-2"></i>Mi Perfil
+                                </h2>
+                            </div>
+
+                            <div class="card-body p-4">
+                                <form th:action="@{/usuario/actualizarPerfil}" 
+                                      method="post" 
+                                      enctype="multipart/form-data" 
+                                      th:object="${usuario}">
+
+                                    <input type="hidden" th:field="*{idUsuario}">
+
+                                    <div class="row g-4 align-items-start">
+
+                                        <!-- FOTO PERFIL -->
+                                        <div class="col-md-4 text-center">
+                                            <div class="perfil-img-wrapper mx-auto">
+                                                <img th:if="${usuario.imagen != null and usuario.imagen != ''}"
+                                                     th:src="${usuario.imagen}"
+                                                     alt="Foto de perfil"
+                                                     class="perfil-img">
+
+                                                <img th:if="${usuario.imagen == null or usuario.imagen == ''}"
+                                                     th:src="@{/img/logo.png}"
+                                                     alt="Foto por defecto"
+                                                     class="perfil-img">
+                                            </div>
+
+                                            <div class="mt-3 d-none" id="contenedorImagen">
+                                                <label for="imagenFile" class="form-label fw-bold">Cambiar foto de perfil</label>
+                                                <input type="file"
+                                                       id="imagenFile"
+                                                       name="imagenFile"
+                                                       class="form-control"
+                                                       accept="image/*">
+                                            </div>
+                                        </div>
+
+                                        <!-- DATOS -->
+                                        <div class="col-md-8">
+
+                                            <div class="mb-3">
+                                                <label for="nombre" class="form-label fw-bold">Nombre de Usuario</label>
+                                                <input type="text"
+                                                       id="nombre"
+                                                       th:field="*{nombre}"
+                                                       class="form-control campo-editable"
+                                                       readonly>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="correo" class="form-label fw-bold">Correo</label>
+                                                <input type="email"
+                                                       id="correo"
+                                                       th:field="*{correo}"
+                                                       class="form-control campo-editable"
+                                                       readonly>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="fechaNacimiento" class="form-label fw-bold">Fecha de Nacimiento</label>
+                                                <input type="date"
+                                                       id="fechaNacimiento"
+                                                       name="fechaNacimiento"
+                                                       th:value="${usuario.fechaNacimiento}"
+                                                       class="form-control campo-editable"
+                                                       readonly>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="contrasena" class="form-label fw-bold">Contraseña</label>
+                                                <div class="input-group">
+                                                    <input type="password"
+                                                           id="contrasena"
+                                                           name="contrasena"
+                                                           th:value="${usuario.contrasena}"
+                                                           class="form-control campo-editable"
+                                                           placeholder="Deja este campo vacío si no deseas cambiar la contraseña"
+                                                           readonly>
+
+                                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                                        <i class="fa-solid fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-4 d-flex gap-2 flex-wrap">
+                                                <button type="button" class="btn btn-danger" id="btnEditar">
+                                                    <i class="fa-solid fa-pen-to-square me-1"></i>Editar
+                                                </button>
+
+                                                <button type="submit" class="btn btn-success d-none" id="btnGuardar">
+                                                    <i class="fa-solid fa-floppy-disk me-1"></i>Guardar cambios
+                                                </button>
+
+                                                <button type="button" class="btn btn-secondary d-none" id="btnCancelar">
+                                                    <i class="fa-solid fa-xmark me-1"></i>Cancelar
+                                                </button>
+
+                                                <a th:href="@{/logout}" class="btn btn-dark">
+                                                    <i class="fa-solid fa-right-from-bracket me-1"></i>Cerrar sesión
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- TOAST EXITO -->
+        <div th:if="${toastSuccess != null}" class="toast-container-custom">
+            <div class="toast align-items-center text-bg-success border-0 show shadow-lg"
+                 role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-circle-check me-2"></i>
+                        <span th:text="${toastSuccess}"></span>
+                    </div>
+                    <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOAST ERROR -->
+        <div th:if="${toastError != null}" class="toast-container-custom">
+            <div class="toast align-items-center text-bg-danger border-0 show shadow-lg"
+                 role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                        <span th:text="${toastError}"></span>
+                    </div>
+                    <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="~{general/fragmentosGeneral :: footer}"></div>
+
+        <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script th:if="${toastSuccess != null or toastError != null}">
+            document.addEventListener('DOMContentLoaded', function () {
+                const toastEl = document.querySelector('.toast');
+                if (toastEl) {
+                    const toast = new bootstrap.Toast(toastEl, {
+                        delay: 3000,
+                        autohide: true
+                    });
+                    toast.show();
+                }
+            });
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+
+                const formPerfil = document.querySelector('form');
+                const btnEditar = document.getElementById("btnEditar");
+                const btnGuardar = document.getElementById("btnGuardar");
+                const btnCancelar = document.getElementById("btnCancelar");
+                const contenedorImagen = document.getElementById("contenedorImagen");
+                const camposEditables = document.querySelectorAll(".campo-editable");
+                const passwordInput = document.getElementById("contrasena");
+                const togglePassword = document.getElementById("togglePassword");
+
+                const estadoInicial = {};
+                camposEditables.forEach(campo => {
+                    estadoInicial[campo.id] = campo.value;
+                });
+
+                if (btnEditar) {
+                    btnEditar.addEventListener("click", function () {
+                        camposEditables.forEach(campo => {
+                            campo.removeAttribute("readonly");
+                        });
+
+                        if (passwordInput) {
+                            passwordInput.setAttribute("type", "text");
+                        }
+
+                        if (contenedorImagen) {
+                            contenedorImagen.classList.remove("d-none");
+                        }
+
+                        btnEditar.classList.add("d-none");
+                        btnGuardar.classList.remove("d-none");
+                        btnCancelar.classList.remove("d-none");
+                    });
+                }
+
+                if (btnCancelar) {
+                    btnCancelar.addEventListener("click", function () {
+                        camposEditables.forEach(campo => {
+                            campo.value = estadoInicial[campo.id];
+                            campo.setAttribute("readonly", true);
+                        });
+
+                        const imagenFile = document.getElementById("imagenFile");
+                        if (imagenFile) {
+                            imagenFile.value = "";
+                        }
+
+                        if (passwordInput) {
+                            passwordInput.setAttribute("type", "password");
+                        }
+
+                        if (togglePassword) {
+                            const icon = togglePassword.querySelector("i");
+                            icon.classList.remove("fa-eye-slash");
+                            icon.classList.add("fa-eye");
+                        }
+
+                        if (contenedorImagen) {
+                            contenedorImagen.classList.add("d-none");
+                        }
+
+                        btnEditar.classList.remove("d-none");
+                        btnGuardar.classList.add("d-none");
+                        btnCancelar.classList.add("d-none");
+                    });
+                }
+
+                if (togglePassword && passwordInput) {
+                    const icon = togglePassword.querySelector("i");
+
+                    togglePassword.addEventListener("click", function () {
+                        const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+                        passwordInput.setAttribute("type", type);
+
+                        icon.classList.toggle("fa-eye");
+                        icon.classList.toggle("fa-eye-slash");
+                    });
+                }
+
+                if (formPerfil && btnGuardar) {
+                    formPerfil.addEventListener("submit", function (e) {
+                        e.preventDefault();
+
+                        Swal.fire({
+                            title: '¿Desea realizar los cambios?',
+                            text: 'Se actualizará la información de tu perfil.',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#b30000',
+                            cancelButtonColor: '#6c757d',
+                            confirmButtonText: 'Sí, guardar',
+                            cancelButtonText: 'Cancelar',
+                            backdrop: 'rgba(0,0,0,0.75)'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                formPerfil.submit();
+                            }
+                        });
+                    });
+                }
+
+            });
+        </script>
+
+    </body>
+</html>

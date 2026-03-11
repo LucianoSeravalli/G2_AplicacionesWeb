@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login | Luk Sport Center</title>
+
+        <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    </head>
+    <body>
+
+        <div th:replace="~{general/fragmentosGeneral :: header}"></div>
+
+        <main class="main-content login-main">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-7 col-lg-5">
+
+                        <div class="card shadow-lg border-0 rounded-4 login-card">
+                            <div class="card-header text-center text-white login-header">
+                                <h2 class="mb-0">
+                                    <i class="fa-solid fa-user-lock me-2"></i>Iniciar Sesión
+                                </h2>
+                            </div>
+
+                            <div class="card-body p-4">
+
+                                <form th:action="@{/login}" method="post">
+
+                                    <div class="mb-3">
+                                        <label for="identificador" class="form-label fw-bold">Usuario o correo</label>
+                                        <input type="text"
+                                               id="identificador"
+                                               name="identificador"
+                                               class="form-control"
+                                               placeholder="Digite su usuario o correo"
+                                               required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="contrasena" class="form-label fw-bold">Contraseña</label>
+                                        <div class="input-group">
+                                            <input type="password"
+                                                   id="contrasena"
+                                                   name="contrasena"
+                                                   class="form-control"
+                                                   placeholder="Digite su contraseña"
+                                                   required>
+                                            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </button>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid mb-3">
+                                        <button type="submit" class="btn btn-danger btn-lg">
+                                            <i class="fa-solid fa-right-to-bracket me-2"></i>Ingresar
+                                        </button>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <p class="mb-2">¿No tienes cuenta?</p>
+                                        <a th:href="@{/usuario/registro}" class="btn btn-outline-dark">
+                                            <i class="fa-solid fa-user-plus me-1"></i>Registrarse
+                                        </a>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div th:if="${toastError != null}" class="toast-container-custom">
+            <div class="toast align-items-center text-bg-danger border-0 show shadow-lg"
+                 role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                        <span th:text="${toastError}"></span>
+                    </div>
+                    <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+        <div th:if="${toastSuccess != null}" class="toast-container-custom">
+            <div class="toast align-items-center text-bg-success border-0 show shadow-lg"
+                 role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-circle-check me-2"></i>
+                        <span th:text="${toastSuccess}"></span>
+                    </div>
+                    <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="~{general/fragmentosGeneral :: footer}"></div>
+
+        <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const togglePassword = document.querySelector("#togglePassword");
+            const passwordInput = document.querySelector("#contrasena");
+
+            if(togglePassword && passwordInput){
+
+                const icon = togglePassword.querySelector("i");
+
+                togglePassword.addEventListener("click", function () {
+
+                    const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+                    passwordInput.setAttribute("type", type);
+
+                    icon.classList.toggle("fa-eye");
+                    icon.classList.toggle("fa-eye-slash");
+
+                });
+
+            }
+
+        });
+        </script>
+        <script th:if="${toastError != null or toastSuccess != null}">
+document.addEventListener('DOMContentLoaded', function () {
+    const toastEl = document.querySelector('.toast');
+    if (toastEl) {
+        const toast = new bootstrap.Toast(toastEl, {
+            delay: 3000,
+            autohide: true
+        });
+        toast.show();
+    }
+});
+        </script>
+        <script th:if="${popupSuccess != null}">
+document.addEventListener("DOMContentLoaded", function () {
+
+    Swal.fire({
+        icon: 'success',
+        title: '¡Correo enviado!',
+        text: 'Te enviamos un correo de verificación. Revisa tu bandeja de entrada.',
+        confirmButtonColor: '#d90429',
+        confirmButtonText: 'Entendido',
+        background: '#ffffff',
+        backdrop: `
+            rgba(0,0,0,0.7)
+        `
+    });
+
+});
+</script>
+
+    </body>
+</html>

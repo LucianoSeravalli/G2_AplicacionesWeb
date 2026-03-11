@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registro | Luk Sport Center</title>
+
+        <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    </head>
+    <body>
+
+        <div th:replace="~{general/fragmentosGeneral :: header}"></div>
+
+        <main class="main-content login-main">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-7 col-lg-5">
+
+                        <div class="card shadow-lg border-0 rounded-4 login-card">
+                            <div class="card-header text-center text-white login-header">
+                                <h2 class="mb-0">
+                                    <i class="fa-solid fa-user-plus me-2"></i>Registro
+                                </h2>
+                            </div>
+
+                            <div class="card-body p-4">
+
+                                <form th:action="@{/usuario/guardar}" method="post" th:object="${usuario}">
+
+                                    <div class="mb-3">
+                                        <label for="nombre" class="form-label fw-bold">Nombre de usuario</label>
+                                        <input type="text"
+                                               id="nombre"
+                                               th:field="*{nombre}"
+                                               class="form-control"
+                                               placeholder="Digite su nombre de usuario"
+                                               required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="correo" class="form-label fw-bold">Correo electrónico</label>
+                                        <input type="email"
+                                               id="correo"
+                                               th:field="*{correo}"
+                                               class="form-control"
+                                               placeholder="Digite su correo"
+                                               required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="contrasena" class="form-label fw-bold">Contraseña</label>
+                                        <div class="input-group">
+                                            <input type="password"
+                                                   id="contrasena"
+                                                   name="contrasena"
+                                                   class="form-control"
+                                                   placeholder="Digite su contraseña"
+                                                   required>
+                                            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </button>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="fechaNacimiento" class="form-label fw-bold">Fecha de nacimiento</label>
+                                        <input type="date"
+                                               id="fechaNacimiento"
+                                               th:field="*{fechaNacimiento}"
+                                               class="form-control">
+                                    </div>
+
+                                    <div class="d-grid mb-3">
+                                        <button type="submit" class="btn btn-danger btn-lg">
+                                            <i class="fa-solid fa-user-plus me-2"></i>Registrarse
+                                        </button>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <a th:href="@{/login}" class="btn btn-outline-dark">
+                                            <i class="fa-solid fa-arrow-left me-1"></i>Volver al login
+                                        </a>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- TOAST ERROR -->
+        <div th:if="${toastError != null}" class="toast-container-custom">
+            <div class="toast align-items-center text-bg-danger border-0 show shadow-lg"
+                 role="alert"
+                 aria-live="assertive"
+                 aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                        <span th:text="${toastError}"></span>
+                    </div>
+                    <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="~{general/fragmentosGeneral :: footer}"></div>
+
+        <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const togglePassword = document.querySelector("#togglePassword");
+            const passwordInput = document.querySelector("#contrasena");
+            const icon = togglePassword.querySelector("i");
+
+            togglePassword.addEventListener("click", function () {
+
+                const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+                passwordInput.setAttribute("type", type);
+
+                icon.classList.toggle("fa-eye");
+                icon.classList.toggle("fa-eye-slash");
+
+            });
+
+        });
+        </script>
+    </body>
+</html>

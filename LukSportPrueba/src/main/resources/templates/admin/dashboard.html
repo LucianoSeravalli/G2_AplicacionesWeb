@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Administración | Luk Sport Center</title>
+
+        <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    </head>
+    <body>
+        <div th:replace="~{general/fragmentosGeneral :: header}"></div>
+
+        <main class="main-content">
+            <div class="container py-5">
+
+                <div class="admin-panel">
+                    <div class="row g-4">
+
+                        <!-- SUBMENU -->
+                        <div class="col-lg-3">
+                            <div class="admin-sidebar shadow-sm">
+                                <h3 class="admin-sidebar-title">
+                                    <i class="fa-solid fa-gears me-2"></i>Panel Admin
+                                </h3>
+
+                                <div class="admin-menu">
+                                    <a th:href="@{/admin}"
+                                       class="admin-menu-link"
+                                       th:classappend="${seccion == 'inicio'} ? ' active' : ''">
+                                        <i class="fa-solid fa-house me-2"></i>Inicio
+                                    </a>
+
+                                    <a th:href="@{/admin/categorias}"
+                                       class="admin-menu-link"
+                                       th:classappend="${seccion == 'categorias'} ? ' active' : ''">
+                                        <i class="fa-solid fa-tags me-2"></i>Categorías
+                                    </a>
+
+                                    <a th:href="@{/admin/productos}"
+                                       class="admin-menu-link"
+                                       th:classappend="${seccion == 'productos'} ? ' active' : ''">
+                                        <i class="fa-solid fa-box-open me-2"></i>Productos
+                                    </a>
+
+                                    <a th:href="@{/admin/transacciones}"
+                                       class="admin-menu-link"
+                                       th:classappend="${seccion == 'transacciones'} ? ' active' : ''">
+                                        <i class="fa-solid fa-receipt me-2"></i>Transacciones
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CONTENIDO -->
+                        <div class="col-lg-9">
+                            <div class="admin-content shadow-sm">
+
+                                <!-- INICIO -->
+                                <div th:if="${seccion == 'inicio'}">
+                                    <div class="admin-header-box">
+                                        <h2 class="admin-title">Bienvenido al Dashboard de Administración</h2>
+                                        <p class="admin-text">
+                                            Desde este panel podrás gestionar de forma centralizada las categorías,
+                                            productos y transacciones de Luk Sport Center. Este apartado está diseñado
+                                            para facilitar el control del inventario, la organización del catálogo y el
+                                            seguimiento de las operaciones realizadas dentro del sistema.
+                                        </p>
+                                    </div>
+
+                                    <div class="row align-items-center g-4 mt-2">
+                                        <div class="col-md-6">
+                                            <img th:src="@{/img/administracion.jpg}"
+                                                 alt="Panel de administración"
+                                                 class="img-fluid admin-img">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="admin-info-card">
+                                                <h4 class="mb-3">¿Qué puedes hacer aquí?</h4>
+                                                <ul class="admin-list">
+                                                    <li>Administrar categorías del catálogo</li>
+                                                    <li>Gestionar productos e inventario</li>
+                                                    <li>Consultar transacciones del sistema</li>
+                                                    <li>Mantener organizado el contenido comercial</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- CATEGORIAS -->
+                                <div th:if="${seccion == 'categorias'}">
+                                    <!-- CATEGORIAS -->
+                                    <div th:if="${seccion == 'categorias'}">
+                                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+                                            <div>
+                                                <h2 class="admin-title mb-1">Gestión de Categorías</h2>
+                                                <p class="admin-text mb-0">
+                                                    Administra las categorías registradas en el sistema.
+                                                </p>
+                                            </div>
+
+                                            <a href="#" class="btn btn-danger" data-bs-toggle="collapse" data-bs-target="#formCategoria">
+                                                <i class="fa-solid fa-plus me-2"></i>Nueva Categoría
+                                            </a>
+                                        </div>
+
+                                        <!-- FORMULARIO CREAR / EDITAR -->
+                                        <div class="collapse mb-4"
+                                             id="formCategoria"
+                                             th:classappend="${modoEdicion != null and modoEdicion} ? ' show' : ''">
+                                            <div class="card shadow-sm border-0">
+                                                <div class="card-body">
+                                                    <h4 class="mb-3"
+                                                        th:text="${modoEdicion != null and modoEdicion} ? 'Editar Categoría' : 'Registrar Categoría'">
+                                                        Registrar Categoría
+                                                    </h4>
+
+                                                    <form th:action="${modoEdicion != null and modoEdicion} ? @{/admin/categorias/actualizar/{id}(id=${categoria.idCategoria})} : @{/admin/categorias/guardar}"
+                                                          th:object="${categoria}"
+                                                          method="post"
+                                                          enctype="multipart/form-data">
+
+                                                        <div class="row g-3">
+                                                            <div class="col-md-6">
+                                                                <label class="form-label">Nombre</label>
+                                                                <input type="text" class="form-control" th:field="*{nombre}" required>
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <label class="form-label">Actividad</label>
+                                                                <select class="form-select" th:field="*{actividad}" required>
+                                                                    <option value="">Seleccione</option>
+                                                                    <option value="activo">Activo</option>
+                                                                    <option value="inactivo">Inactivo</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <label class="form-label">Imagen</label>
+                                                                <input type="file" class="form-control" name="imagenFile" accept="image/*">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mt-4 d-flex gap-2">
+                                                            <button type="submit" class="btn btn-danger"
+                                                                    th:text="${modoEdicion != null and modoEdicion} ? 'Actualizar' : 'Guardar'">
+                                                                Guardar
+                                                            </button>
+
+                                                            <a th:if="${modoEdicion != null and modoEdicion}"
+                                                               th:href="@{/admin/categorias}"
+                                                               class="btn btn-secondary">
+                                                                Cancelar
+                                                            </a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- LISTADO -->
+                                        <div class="row g-4">
+                                            <div class="col-md-6 col-xl-4" th:each="categoria : ${categorias}">
+                                                <div class="admin-card h-100">
+
+                                                    <img th:if="${categoria.imagen != null and !#strings.isEmpty(categoria.imagen)}"
+                                                         th:src="${categoria.imagen}"
+                                                         class="admin-card-img"
+                                                         alt="Imagen de categoría">
+
+                                                    <img th:if="${categoria.imagen == null or #strings.isEmpty(categoria.imagen)}"
+                                                         th:src="@{/img/nosotros.png}"
+                                                         class="admin-card-img"
+                                                         alt="Imagen por defecto">
+
+                                                    <div class="admin-card-body">
+                                                        <h5 class="admin-card-title" th:text="${categoria.nombre}">Nombre Categoría</h5>
+
+                                                        <p class="admin-card-text">
+                                                            Estado:
+                                                            <span th:if="${categoria.actividad == 'activo'}" class="badge text-bg-success">Activo</span>
+                                                            <span th:if="${categoria.actividad == 'inactivo'}" class="badge text-bg-secondary">Inactivo</span>
+                                                        </p>
+
+                                                        <p class="admin-card-text">
+                                                            Productos asociados:
+                                                            <strong th:text="${categoria.productos != null ? #lists.size(categoria.productos) : 0}">0</strong>
+                                                        </p>
+
+                                                        <div class="admin-card-actions">
+                                                            <a th:href="@{/admin/categorias/editar/{id}(id=${categoria.idCategoria})}"
+                                                               class="btn btn-outline-warning btn-sm">
+                                                                Editar
+                                                            </a>
+
+                                                            <a th:href="@{/admin/categorias/eliminar/{id}(id=${categoria.idCategoria})}"
+                                                               class="btn btn-outline-danger btn-sm"
+                                                               onclick="return confirm('¿Seguro que deseas eliminar esta categoría?');">
+                                                                Eliminar
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Mensaje si no hay categorías -->
+                                            <div class="col-12" th:if="${#lists.isEmpty(categorias)}">
+                                                <div class="alert alert-light border text-center">
+                                                    No hay categorías registradas.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- PRODUCTOS -->
+                                    <div th:if="${seccion == 'productos'}">
+                                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+                                            <div>
+                                                <h2 class="admin-title mb-1">Gestión de Productos</h2>
+                                                <p class="admin-text mb-0">
+                                                    Administra los productos disponibles en el catálogo.
+                                                </p>
+                                            </div>
+
+                                            <a href="#" class="btn btn-danger">
+                                                <i class="fa-solid fa-plus me-2"></i>Nuevo Producto
+                                            </a>
+                                        </div>
+
+                                        <div class="row g-4">
+                                            <!-- EJEMPLO DE TARJETA -->
+                                            <div class="col-md-6 col-xl-4">
+                                                <div class="admin-card h-100">
+                                                    <img th:src="@{/img/nosotros.png}" class="admin-card-img" alt="Producto">
+
+                                                    <div class="admin-card-body">
+                                                        <h5 class="admin-card-title">Balón Nike</h5>
+                                                        <p class="admin-card-text mb-1"><strong>Precio:</strong> ₡18,500</p>
+                                                        <p class="admin-card-text mb-1"><strong>Stock:</strong> 12</p>
+                                                        <p class="admin-card-text"><strong>Categoría:</strong> Fútbol</p>
+
+                                                        <div class="admin-card-actions">
+                                                            <a href="#" class="btn btn-outline-warning btn-sm">Editar</a>
+                                                            <a href="#" class="btn btn-outline-secondary btn-sm">Actualizar</a>
+                                                            <a href="#" class="btn btn-outline-danger btn-sm">Eliminar</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Luego aquí irá el th:each real -->
+                                        </div>
+                                    </div>
+
+                                    <!-- TRANSACCIONES -->
+                                    <div th:if="${seccion == 'transacciones'}">
+                                        <div class="mb-4">
+                                            <h2 class="admin-title mb-1">Gestión de Transacciones</h2>
+                                            <p class="admin-text mb-0">
+                                                Consulta las compras y movimientos realizados por los usuarios.
+                                            </p>
+                                        </div>
+
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-hover align-middle admin-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID Pedido</th>
+                                                        <th>Usuario</th>
+                                                        <th>Total</th>
+                                                        <th>Detalle</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Luciano</td>
+                                                        <td>₡35,000</td>
+                                                        <td>
+                                                            <a href="#" class="btn btn-outline-primary btn-sm">Ver</a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+        </main>
+
+        <div th:replace="~{general/fragmentosGeneral :: footer}"></div>
+
+        <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
