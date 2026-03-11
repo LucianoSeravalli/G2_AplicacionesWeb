@@ -1,0 +1,104 @@
+-- Crear la base de datos
+CREATE DATABASE IF NOT EXISTS LukSportCenter
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+USE LukSportCenter;
+
+-- =========================
+-- TABLA ROL
+-- =========================
+CREATE TABLE Rol (
+    idRol INT AUTO_INCREMENT PRIMARY KEY,
+    Rol VARCHAR(50) NOT NULL UNIQUE
+) ENGINE=InnoDB;
+
+Insert into Rol (Rol) Values ("Usuario"), ("Administrador");
+Select * from Rol;
+
+-- =========================
+-- TABLA CATEGORIA
+-- =========================
+CREATE TABLE Categoria (
+    idCategoria INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Actividad ENUM('activo', 'inactivo') NOT NULL DEFAULT 'activo',
+    Imagen VARCHAR(1024)
+) ENGINE=InnoDB;
+
+Select * from Categoria;
+
+-- =========================
+-- TABLA USUARIO
+-- =========================
+CREATE TABLE Usuario (
+    idUsuario INT AUTO_INCREMENT PRIMARY KEY,
+    idRol INT NOT NULL,
+    Correo VARCHAR(100) NOT NULL,
+    Nombre VARCHAR(100) NOT NULL,
+    Contrasena VARCHAR(255) NOT NULL,
+    Imagen VARCHAR(500),
+    FechaNacimiento DATE,
+    CONSTRAINT fk_usuario_rol
+        FOREIGN KEY (idRol) REFERENCES Rol(idRol)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
+-- DELETE FROM Usuario WHERE idUsuario = 3;
+ALTER TABLE Usuario
+ADD COLUMN Activo BOOLEAN DEFAULT FALSE,
+ADD COLUMN TokenVerificacion VARCHAR(255),
+ADD COLUMN FechaExpiracionToken DATETIME;
+
+-- UPDATE Usuario SET idRol = 2 WHERE idUsuario = 4;
+
+Select * From Usuario;
+
+-- =========================
+-- TABLA PRODUCTO
+-- =========================
+CREATE TABLE Producto (
+    IdProducto INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(150) NOT NULL,
+    CantidadExistencia INT NOT NULL DEFAULT 0,
+    PrecioUnitario DECIMAL(10,2) NOT NULL,
+    Categoria INT NOT NULL,
+    Imagen VARCHAR(1024),
+    CONSTRAINT fk_producto_categoria
+        FOREIGN KEY (Categoria) REFERENCES Categoria(idCategoria)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
+
+-- =========================
+-- TABLA PEDIDOS
+-- =========================
+CREATE TABLE Pedidos (
+    idPedido INT AUTO_INCREMENT PRIMARY KEY,
+    idUsuario INT NOT NULL,
+    Total DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    CONSTRAINT fk_pedido_usuario
+        FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
+-- =========================
+-- TABLA PEDIDOSXPRODUCTO
+-- =========================
+CREATE TABLE PedidosXProducto (
+    idPedidosXProducto INT AUTO_INCREMENT PRIMARY KEY,
+    idPedidos INT NOT NULL,
+    idProductos INT NOT NULL,
+    Cantidad INT NOT NULL DEFAULT 1,
+    CONSTRAINT fk_pxp_pedido
+        FOREIGN KEY (idPedidos) REFERENCES Pedidos(idPedido)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_pxp_producto
+        FOREIGN KEY (idProductos) REFERENCES Producto(IdProducto)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+) ENGINE=InnoDB;
