@@ -1,13 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package LukSportPrueba;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,9 +21,19 @@ public class StorageConfig {
 
     @Bean
     public Storage storage() throws IOException {
-        ClassPathResource resource = new ClassPathResource(jsonPath + File.separator + jsonFile);
+
+        String ruta = jsonPath + "/" + jsonFile;
+
+        ClassPathResource resource = new ClassPathResource(ruta);
+        
+        System.out.println("jsonPath: " + jsonPath);
+        System.out.println("jsonFile: " + jsonFile);
+        System.out.println("Ruta Firebase JSON: " + ruta);
+        System.out.println("Existe recurso: " + resource.exists());
+
         try (InputStream inputStream = resource.getInputStream()) {
             GoogleCredentials credentials = GoogleCredentials.fromStream(inputStream);
+
             return StorageOptions.newBuilder()
                     .setCredentials(credentials)
                     .build()

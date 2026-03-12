@@ -25,6 +25,9 @@ public class UsuarioService {
     @Autowired
     private RolRepository rolRepository;
 
+    @Autowired
+    private JavaMailSender mailSender;
+
     public Usuario login(String identificador, String contrasena) {
         try {
             Usuario usuario = usuarioRepository.findByNombreAndContrasenaAndActivoTrue(identificador, contrasena);
@@ -32,7 +35,6 @@ public class UsuarioService {
             if (usuario == null) {
                 usuario = usuarioRepository.findByCorreoAndContrasenaAndActivoTrue(identificador, contrasena);
             }
-
             return usuario;
         } catch (Exception ex) {
             System.out.println(ex);
@@ -69,8 +71,6 @@ public class UsuarioService {
         }
     }
 
-    @Autowired
-    private JavaMailSender mailSender;
 
     public void enviarCorreoVerificacion(Usuario usuario) {
         try {
