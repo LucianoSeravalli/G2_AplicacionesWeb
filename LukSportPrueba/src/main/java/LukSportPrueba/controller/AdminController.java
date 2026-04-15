@@ -60,10 +60,12 @@ public class AdminController {
             return "redirect:/";
         }
 
+        model.addAttribute("productos", productoService.listarProductos());
         model.addAttribute("seccion", "productos");
         return "admin/dashboard";
     }
-
+    
+    
     @GetMapping("/transacciones")
     public String adminTransacciones(HttpSession session, Model model) {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
@@ -118,7 +120,7 @@ public class AdminController {
         if (!esAdmin(usuarioSesion)) {
             return "redirect:/";
         }
-
+        producto.setCantidadExistencia(0);
         productoService.guardarProducto(producto, imagenFile, idCategoria);
 
         return "redirect:/admin/productos/listado";
@@ -211,7 +213,7 @@ public class AdminController {
 
         productoService.agregarExistenciaProductoTalla(idProducto, idTalla, cantidad);
 
-        return "redirect:/admin/productos/" + idProducto + "/inventario";
+        return "redirect:/admin/productos";
     }
     
 }

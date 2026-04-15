@@ -137,3 +137,5 @@ CREATE TABLE CantidadProductoTalla (
     CONSTRAINT fk_producto_talla_talla
         FOREIGN KEY (IdTalla) REFERENCES TallasProducto(IdTalla)
 );
+
+Select * from CantidadProductoTalla;

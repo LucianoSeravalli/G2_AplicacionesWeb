@@ -25,9 +25,6 @@ public class ProductoService {
     private FireBaseStorageService fireBaseStorageService;
     
     @Autowired
-    private CantidadProductoTalla cantidadProductoTalla;
-    
-    @Autowired
     private CantidadProductoTallaRepository cantidadProductoTallaRepository;
     
     @Autowired
@@ -150,20 +147,10 @@ public class ProductoService {
     
     public CantidadProductoTalla agregarExistenciaProductoTalla(Integer idProducto, Integer idTalla, Integer cantidadAgregar) {
         try {
-            if (cantidadAgregar == null || cantidadAgregar <= 0) {
-                System.out.println("La cantidad a agregar debe ser mayor a 0");
-                return null;
-            }
-
             Producto producto = productoRepository.findById(idProducto).orElse(null);
-            if (producto == null) {
-                System.out.println("Producto no encontrado");
-                return null;
-            }
-
             TallaProducto talla = tallaProductoRepository.findById(idTalla).orElse(null);
-            if (talla == null) {
-                System.out.println("Talla no encontrada");
+
+            if (producto == null || talla == null) {
                 return null;
             }
 
@@ -180,16 +167,33 @@ public class ProductoService {
                 existencia.setExistencia(existencia.getExistencia() + cantidadAgregar);
             }
 
-            return cantidadProductoTallaRepository.save(existencia);
+            cantidadProductoTallaRepository.save(existencia);
+            
+            int total = cantidadProductoTallaRepository.findAll().stream()
+                    .filter(e -> e.getProducto().getIdProducto().equals(idProducto))
+                    .mapToInt(CantidadProductoTalla::getExistencia)
+                    .sum();
+
+            producto.setCantidadExistencia(total);
+            productoRepository.save(producto);
+
+            return existencia;
 
         } catch (Exception ex) {
-            System.out.println("Error al agregar existencia por talla: " + ex.getMessage());
             ex.printStackTrace();
             return null;
         }
     }
     
     
-    
-    
+    public Producto obtenerProductoPorId(Integer idProducto) {
+        try {
+            return productoRepository.findById(idProducto).orElse(null);
+        } catch (Exception ex) {
+            System.out.println("Error al obtener producto por id: " + ex.getMessage());
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
 }
