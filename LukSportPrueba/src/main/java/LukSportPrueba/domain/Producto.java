@@ -5,6 +5,7 @@
 package LukSportPrueba.domain;
 
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -32,4 +33,7 @@ public class Producto {
 
     @Column(name = "Imagen")
     private String imagen;
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CantidadProductoTalla> tallas;
 }
