@@ -14,6 +14,7 @@ CREATE TABLE Rol (
 ) ENGINE=InnoDB;
 
 Insert into Rol (Rol) Values ("Usuario"), ("Administrador");
+Insert into Rol (Rol) Values ("Vendedor");
 Select * from Rol;
 
 -- =========================
@@ -45,7 +46,7 @@ CREATE TABLE Usuario (
         ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
--- DELETE FROM Usuario WHERE idUsuario = 3;
+-- DELETE FROM Usuario WHERE idUsuario = 9;
 ALTER TABLE Usuario
 ADD COLUMN Activo BOOLEAN DEFAULT FALSE,
 ADD COLUMN TokenVerificacion VARCHAR(255),
@@ -70,7 +71,6 @@ CREATE TABLE Producto (
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 ) ENGINE=InnoDB;
-
 
 -- =========================
 -- TABLA PEDIDOS
