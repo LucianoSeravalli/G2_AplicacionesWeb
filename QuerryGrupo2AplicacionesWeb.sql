@@ -102,3 +102,35 @@ CREATE TABLE PedidosXProducto (
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 ) ENGINE=InnoDB;
+
+
+-- =========================
+-- TABLA TallasProducto
+-- =========================
+
+CREATE TABLE TallasProducto (
+    IdTalla INT AUTO_INCREMENT PRIMARY KEY,
+    NombreTalla VARCHAR(50) NOT NULL UNIQUE
+);
+
+INSERT INTO TallasProducto (NombreTalla) VALUES ('XS');
+INSERT INTO TallasProducto (NombreTalla) VALUES ('S');
+INSERT INTO TallasProducto (NombreTalla) VALUES ('M');
+INSERT INTO TallasProducto (NombreTalla) VALUES ('L');
+INSERT INTO TallasProducto (NombreTalla) VALUES ('XL');
+INSERT INTO TallasProducto (NombreTalla) VALUES ('Este producto no tiene tallas');
+
+-- =========================
+-- TABLA CantidadProductoTallas
+-- =========================
+
+CREATE TABLE CantidadProductoTalla (
+    IdProductoTalla INT AUTO_INCREMENT PRIMARY KEY,
+    IdProducto INT NOT NULL,
+    IdTalla INT NOT NULL,
+    Existencia INT NOT NULL,
+    CONSTRAINT fk_producto_talla_producto
+        FOREIGN KEY (IdProducto) REFERENCES producto(IdProducto),
+    CONSTRAINT fk_producto_talla_talla
+        FOREIGN KEY (IdTalla) REFERENCES TallasProducto(IdTalla)
+);
