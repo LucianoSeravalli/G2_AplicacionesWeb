@@ -72,6 +72,9 @@ CREATE TABLE Producto (
         ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
+ALTER TABLE Producto
+ADD COLUMN Descripcion VARCHAR(150) NOT NULL;
+
 -- =========================
 -- TABLA PEDIDOS
 -- =========================
@@ -134,3 +137,5 @@ CREATE TABLE CantidadProductoTalla (
     CONSTRAINT fk_producto_talla_talla
         FOREIGN KEY (IdTalla) REFERENCES TallasProducto(IdTalla)
 );
+
+Select * from CantidadProductoTalla;

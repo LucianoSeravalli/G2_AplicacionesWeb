@@ -91,8 +91,6 @@
 
                                 <!-- CATEGORIAS -->
                                 <div th:if="${seccion == 'categorias'}">
-                                    <!-- CATEGORIAS -->
-                                    <div th:if="${seccion == 'categorias'}">
                                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
                                             <div>
                                                 <h2 class="admin-title mb-1">Gestión de Categorías</h2>
@@ -215,7 +213,8 @@
                                     </div>
 
                                     <!-- PRODUCTOS -->
-                                    <div th:if="${seccion == 'productos'}">
+                                    <div th:if="${seccion == 'productos' or seccion == 'nuevoProducto' or seccion == 'editarProducto' or seccion == 'inventarioProducto'}">
+
                                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
                                             <div>
                                                 <h2 class="admin-title mb-1">Gestión de Productos</h2>
@@ -224,33 +223,205 @@
                                                 </p>
                                             </div>
 
-                                            <a href="#" class="btn btn-danger">
+                                            <a th:href="@{/admin/productos/nuevo}" class="btn btn-danger">
                                                 <i class="fa-solid fa-plus me-2"></i>Nuevo Producto
                                             </a>
                                         </div>
 
-                                        <div class="row g-4">
-                                            <!-- EJEMPLO DE TARJETA -->
-                                            <div class="col-md-6 col-xl-4">
+                                        <!-- FORMULARIO NUEVO PRODUCTO -->
+                                        <div th:if="${seccion == 'nuevoProducto'}" class="card shadow-sm border-0 mb-4">
+                                            <div class="card-body">
+                                                <h4 class="mb-3">Registrar Producto</h4>
+
+                                                <form th:action="@{/admin/productos/guardar}"
+                                                      th:object="${producto}"
+                                                      method="post"
+                                                      enctype="multipart/form-data">
+
+                                                    <div class="row g-3">
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Nombre</label>
+                                                            <input type="text" class="form-control" th:field="*{nombre}" required>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Categoría</label>
+                                                            <select class="form-select" name="idCategoria" required>
+                                                                <option value="">Seleccione una categoría</option>
+                                                                <option th:each="categoria : ${categorias}"
+                                                                        th:value="${categoria.idCategoria}"
+                                                                        th:text="${categoria.nombre}">
+                                                                </option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Precio Unitario</label>
+                                                            <input type="number" step="0.01" min="0" class="form-control" th:field="*{precioUnitario}" required>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <label class="form-label">Imagen</label>
+                                                            <input type="file" class="form-control" name="imagenFile" accept="image/*">
+                                                        </div>
+
+                                                        <div class="col-12">
+                                                            <label class="form-label">Descripción</label>
+                                                            <textarea class="form-control" th:field="*{descripcion}" rows="3" maxlength="150" required></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mt-4 d-flex gap-2">
+                                                        <button type="submit" class="btn btn-danger">Guardar</button>
+                                                        <a th:href="@{/admin/productos}" class="btn btn-secondary">Cancelar</a>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <!-- FORMULARIO EDITAR PRODUCTO -->
+                                        <div th:if="${seccion == 'editarProducto'}" class="card shadow-sm border-0 mb-4">
+                                            <div class="card-body">
+                                                <h4 class="mb-3">Editar Producto</h4>
+
+                                                <form th:action="@{/admin/productos/editar/{id}(id=${producto.idProducto})}"
+                                                      method="post"
+                                                      enctype="multipart/form-data">
+
+                                                    <div class="row g-3">
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Nombre</label>
+                                                            <input type="text" class="form-control" name="nombre" th:value="${producto.nombre}" required>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Imagen</label>
+                                                            <input type="file" class="form-control" name="imagenFile" accept="image/*">
+                                                        </div>
+
+                                                        <div class="col-12">
+                                                            <label class="form-label">Descripción</label>
+                                                            <textarea class="form-control" name="descripcion" rows="3" maxlength="150" required
+                                                                      th:text="${producto.descripcion}"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mt-3" th:if="${producto.imagen != null and !#strings.isEmpty(producto.imagen)}">
+                                                        <p class="mb-2"><strong>Imagen actual:</strong></p>
+                                                        <img th:src="${producto.imagen}" alt="Imagen actual del producto"
+                                                             class="img-fluid rounded" style="max-width: 220px;">
+                                                    </div>
+
+                                                    <div class="mt-4 d-flex gap-2">
+                                                        <button type="submit" class="btn btn-warning">Actualizar</button>
+                                                        <a th:href="@{/admin/productos}" class="btn btn-secondary">Cancelar</a>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <!-- FORMULARIO INVENTARIO -->
+                                        <div th:if="${seccion == 'inventarioProducto'}" class="card shadow-sm border-0 mb-4">
+                                            <div class="card-body">
+                                                <h4 class="mb-3">
+                                                    Agregar existencias a:
+                                                    <span th:text="${producto.nombre}">Producto</span>
+                                                </h4>
+
+                                                <form th:action="@{/admin/productos/agregarExistencia}" method="post">
+                                                    <input type="hidden" name="idProducto" th:value="${producto.idProducto}">
+
+                                                    <div class="row g-3">
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Talla</label>
+                                                            <select class="form-select" name="idTalla" required>
+                                                                <option value="">Seleccione una talla</option>
+                                                                <option th:each="talla : ${tallas}"
+                                                                        th:value="${talla.idTalla}"
+                                                                        th:text="${talla.nombreTalla}">
+                                                                </option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Cantidad a agregar</label>
+                                                            <input type="number" min="1" class="form-control" name="cantidad" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mt-4 d-flex gap-2">
+                                                        <button type="submit" class="btn btn-secondary">Agregar existencia</button>
+                                                        <a th:href="@{/admin/productos}" class="btn btn-outline-secondary">Volver</a>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <!-- LISTADO DE PRODUCTOS -->
+                                        <div class="row g-4" th:if="${seccion == 'productos'}">
+                                            <div class="col-md-6 col-xl-4" th:each="producto : ${productos}">
                                                 <div class="admin-card h-100">
-                                                    <img th:src="@{/img/nosotros.png}" class="admin-card-img" alt="Producto">
+
+                                                    <img th:if="${producto.imagen != null and !#strings.isEmpty(producto.imagen)}"
+                                                         th:src="${producto.imagen}"
+                                                         class="admin-card-img"
+                                                         alt="Imagen de producto">
+
+                                                    <img th:if="${producto.imagen == null or #strings.isEmpty(producto.imagen)}"
+                                                         th:src="@{/img/nosotros.png}"
+                                                         class="admin-card-img"
+                                                         alt="Imagen por defecto">
 
                                                     <div class="admin-card-body">
-                                                        <h5 class="admin-card-title">Balón Nike</h5>
-                                                        <p class="admin-card-text mb-1"><strong>Precio:</strong> ₡18,500</p>
-                                                        <p class="admin-card-text mb-1"><strong>Stock:</strong> 12</p>
-                                                        <p class="admin-card-text"><strong>Categoría:</strong> Fútbol</p>
+                                                        <h5 class="admin-card-title" th:text="${producto.nombre}">Nombre Producto</h5>
 
-                                                        <div class="admin-card-actions">
-                                                            <a href="#" class="btn btn-outline-warning btn-sm">Editar</a>
-                                                            <a href="#" class="btn btn-outline-secondary btn-sm">Actualizar</a>
-                                                            <a href="#" class="btn btn-outline-danger btn-sm">Eliminar</a>
+                                                        <p class="admin-card-text mb-1">
+                                                            <strong>Precio:</strong>
+                                                            ₡<span th:text="${#numbers.formatDecimal(producto.precioUnitario, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                                                        </p>
+
+                                                        <p class="admin-card-text mb-1">
+                                                            <strong>Stock general:</strong>
+                                                            <span th:text="${producto.cantidadExistencia}">0</span>
+                                                        </p>
+
+                                                        <p class="admin-card-text mb-1">
+                                                            <strong>Categoría:</strong>
+                                                            <span th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">Categoría</span>
+                                                        </p>
+
+                                                        <p class="admin-card-text mb-2">
+                                                            <strong>Descripción:</strong>
+                                                            <span th:text="${producto.descripcion}">Descripción del producto</span>
+                                                        </p>
+
+                                                        <div class="admin-card-actions d-flex flex-wrap gap-2">
+                                                            <a th:href="@{/admin/productos/editar/{id}(id=${producto.idProducto})}"
+                                                               class="btn btn-outline-warning btn-sm">
+                                                                Editar
+                                                            </a>
+
+                                                            <a th:href="@{/admin/productos/{id}/inventario(id=${producto.idProducto})}"
+                                                               class="btn btn-outline-secondary btn-sm">
+                                                                Inventario
+                                                            </a>
+
+                                                            <a th:href="@{/admin/productos/eliminar/{id}(id=${producto.idProducto})}"
+                                                               class="btn btn-outline-danger btn-sm"
+                                                               onclick="return confirm('¿Seguro que deseas eliminar este producto?');">
+                                                                Eliminar
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <!-- Luego aquí irá el th:each real -->
+                                            <!-- Mensaje si no hay productos -->
+                                            <div class="col-12" th:if="${#lists.isEmpty(productos)}">
+                                                <div class="alert alert-light border text-center">
+                                                    No hay productos registrados.
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
