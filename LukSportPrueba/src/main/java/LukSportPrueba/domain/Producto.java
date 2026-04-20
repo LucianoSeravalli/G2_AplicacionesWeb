@@ -33,9 +33,12 @@ public class Producto {
 
     @Column(name = "Imagen")
     private String imagen;
-    
+
     @Column(name = "Descripcion")
     private String Descripcion;
+
+    @Column(name = "TieneTalla")
+    private Boolean tieneTalla;
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CantidadProductoTalla> tallas;

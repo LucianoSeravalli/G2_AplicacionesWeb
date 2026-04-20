@@ -203,7 +203,8 @@ public class AdminController {
     public String agregarExistencia(HttpSession session,
             @RequestParam("idProducto") Integer idProducto,
             @RequestParam("idTalla") Integer idTalla,
-            @RequestParam("cantidad") Integer cantidad) {
+            @RequestParam("cantidad") Integer cantidad,
+            Model model) {
 
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
@@ -211,9 +212,19 @@ public class AdminController {
             return "redirect:/";
         }
 
-        productoService.agregarExistenciaProductoTalla(idProducto, idTalla, cantidad);
+        String resultado = productoService.agregarExistenciaProductoTalla(idProducto, idTalla, cantidad);
 
-        return "redirect:/admin/productos";
+        model.addAttribute("producto", productoService.obtenerProductoPorId(idProducto));
+        model.addAttribute("tallas", tallaProductoRepository.findAll());
+        model.addAttribute("seccion", "inventarioProducto");
+
+        if (!"ok".equals(resultado)) {
+            model.addAttribute("errorInventario", resultado);
+        } else {
+            model.addAttribute("mensajeExito", "Existencia agregada correctamente");
+        }
+
+        return "redirect:/admin/productos/listado";
     }
     
 }

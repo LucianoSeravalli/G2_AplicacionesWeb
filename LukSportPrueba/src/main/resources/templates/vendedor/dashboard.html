@@ -47,10 +47,34 @@
                                 <!-- INICIO -->
                                 <div th:if="${seccion == 'inicio'}">
                                     <div class="admin-header-box">
-                                        <h2 class="admin-title">Panel de Vendedor</h2>
+                                        <h2 class="admin-title">Bienvenido al Panel de Vendedor</h2>
                                         <p class="admin-text">
-                                            Desde aquí puedes consultar productos y actualizar existencias por talla.
+                                            Desde este apartado podrás consultar el inventario disponible, actualizar
+                                            existencias de los productos, sumar o descontar cantidades según los
+                                            movimientos realizados y mantener un control ordenado del stock para apoyar
+                                            la operación diaria de Luk Sport Center.
                                         </p>
+                                    </div>
+
+                                    <div class="row align-items-center g-4 mt-2">
+                                        <div class="col-md-6">
+                                            <img th:src="@{/img/vendedor.jpg}"
+                                                 alt="Panel de vendedor"
+                                                 class="img-fluid admin-img">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="admin-info-card">
+                                                <h4 class="mb-3">¿Qué puedes hacer aquí?</h4>
+                                                <ul class="admin-list">
+                                                    <li>Consultar inventario disponible</li>
+                                                    <li>Sumar existencias por talla</li>
+                                                    <li>Descontar productos vendidos</li>
+                                                    <li>Mantener actualizado el stock</li>
+                                                    <li>Apoyar la operación diaria de ventas</li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -86,6 +110,11 @@
                                                     </p>
 
                                                     <p class="admin-card-text mb-1">
+                                                        <strong>Tiene tallas:</strong>
+                                                        <span th:text="${producto.tieneTalla ? 'Sí' : 'No'}">Sí</span>
+                                                    </p>
+
+                                                    <p class="admin-card-text mb-1">
                                                         <strong>Categoría:</strong>
                                                         <span th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">Categoría</span>
                                                     </p>
@@ -116,6 +145,24 @@
                                                 Gestionar inventario de:
                                                 <span th:text="${producto.nombre}">Producto</span>
                                             </h4>
+
+                                            <p class="mb-3">
+                                                <strong>Configuración:</strong>
+                                                <span th:if="${producto.tieneTalla}" class="badge text-bg-success">
+                                                    Producto con tallas
+                                                </span>
+                                                <span th:if="${!producto.tieneTalla}" class="badge text-bg-secondary">
+                                                    Producto sin tallas
+                                                </span>
+                                            </p>
+
+                                            <div th:if="${errorInventario != null}" class="alert alert-danger">
+                                                <span th:text="${errorInventario}"></span>
+                                            </div>
+
+                                            <div th:if="${mensajeExito != null}" class="alert alert-success">
+                                                <span th:text="${mensajeExito}"></span>
+                                            </div>
 
                                             <div class="row g-4">
                                                 <div class="col-md-6">
@@ -180,13 +227,9 @@
 
                             </div>
                         </div>
+                        </main>
 
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <div th:replace="~{general/fragmentosGeneral :: footer}"></div>
-        <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
-    </body>
-</html>
+                        <div th:replace="~{general/fragmentosGeneral :: footer}"></div>
+                        <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
+                        </body>
+                        </html>

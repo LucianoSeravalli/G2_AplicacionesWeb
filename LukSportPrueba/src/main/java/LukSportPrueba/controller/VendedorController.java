@@ -27,7 +27,8 @@ public class VendedorController {
     private boolean esVendedor(Usuario usuario) {
         return usuario != null
                 && usuario.getRol() != null
-                && usuario.getRol().getIdRol() == 3;
+                && (usuario.getRol().getIdRol() == 2
+                || usuario.getRol().getIdRol() == 3);
     }
 
     @GetMapping
@@ -58,8 +59,8 @@ public class VendedorController {
 
     @GetMapping("/productos/{idProducto}/inventario")
     public String gestionarInventario(HttpSession session,
-                                      @PathVariable("idProducto") Integer idProducto,
-                                      Model model) {
+            @PathVariable("idProducto") Integer idProducto,
+            Model model) {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esVendedor(usuarioSesion)) {
@@ -76,33 +77,57 @@ public class VendedorController {
 
     @PostMapping("/productos/agregarExistencia")
     public String agregarExistencia(HttpSession session,
-                                    @RequestParam("idProducto") Integer idProducto,
-                                    @RequestParam("idTalla") Integer idTalla,
-                                    @RequestParam("cantidad") Integer cantidad) {
+            @RequestParam("idProducto") Integer idProducto,
+            @RequestParam("idTalla") Integer idTalla,
+            @RequestParam("cantidad") Integer cantidad,
+            Model model) {
+
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esVendedor(usuarioSesion)) {
             return "redirect:/";
         }
 
-        productoService.agregarExistenciaProductoTalla(idProducto, idTalla, cantidad);
+        String resultado = productoService.agregarExistenciaProductoTalla(idProducto, idTalla, cantidad);
 
-        return "redirect:/vendedor/productos/" + idProducto + "/inventario";
+        model.addAttribute("producto", productoService.obtenerProductoPorId(idProducto));
+        model.addAttribute("tallas", tallaProductoRepository.findAll());
+        model.addAttribute("seccion", "inventarioProducto");
+
+        if (!"ok".equals(resultado)) {
+            model.addAttribute("errorInventario", resultado);
+        } else {
+            model.addAttribute("mensajeExito", "Existencia agregada correctamente");
+        }
+
+        return "vendedor/dashboard";
     }
 
     @PostMapping("/productos/quitarExistencia")
     public String quitarExistencia(HttpSession session,
-                                   @RequestParam("idProducto") Integer idProducto,
-                                   @RequestParam("idTalla") Integer idTalla,
-                                   @RequestParam("cantidad") Integer cantidad) {
+            @RequestParam("idProducto") Integer idProducto,
+            @RequestParam("idTalla") Integer idTalla,
+            @RequestParam("cantidad") Integer cantidad,
+            Model model) {
+
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esVendedor(usuarioSesion)) {
             return "redirect:/";
         }
 
-        productoService.quitarExistenciaProductoTalla(idProducto, idTalla, cantidad);
+        String resultado = productoService.quitarExistenciaProductoTalla(idProducto, idTalla, cantidad);
 
-        return "redirect:/vendedor/productos/" + idProducto + "/inventario";
+        model.addAttribute("producto", productoService.obtenerProductoPorId(idProducto));
+        model.addAttribute("tallas", tallaProductoRepository.findAll());
+        model.addAttribute("seccion", "inventarioProducto");
+
+        if (!"ok".equals(resultado)) {
+            model.addAttribute("errorInventario", resultado);
+        } else {
+            model.addAttribute("mensajeExito", "Existencia descontada correctamente");
+        }
+
+        return "vendedor/dashboard";
     }
 }

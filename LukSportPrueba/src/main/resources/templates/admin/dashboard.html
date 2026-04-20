@@ -91,150 +91,32 @@
 
                                 <!-- CATEGORIAS -->
                                 <div th:if="${seccion == 'categorias'}">
-                                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-                                            <div>
-                                                <h2 class="admin-title mb-1">Gestión de Categorías</h2>
-                                                <p class="admin-text mb-0">
-                                                    Administra las categorías registradas en el sistema.
-                                                </p>
-                                            </div>
-
-                                            <a href="#" class="btn btn-danger" data-bs-toggle="collapse" data-bs-target="#formCategoria">
-                                                <i class="fa-solid fa-plus me-2"></i>Nueva Categoría
-                                            </a>
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+                                        <div>
+                                            <h2 class="admin-title mb-1">Gestión de Categorías</h2>
+                                            <p class="admin-text mb-0">
+                                                Administra las categorías registradas en el sistema.
+                                            </p>
                                         </div>
 
-                                        <!-- FORMULARIO CREAR / EDITAR -->
-                                        <div class="collapse mb-4"
-                                             id="formCategoria"
-                                             th:classappend="${modoEdicion != null and modoEdicion} ? ' show' : ''">
-                                            <div class="card shadow-sm border-0">
-                                                <div class="card-body">
-                                                    <h4 class="mb-3"
-                                                        th:text="${modoEdicion != null and modoEdicion} ? 'Editar Categoría' : 'Registrar Categoría'">
-                                                        Registrar Categoría
-                                                    </h4>
-
-                                                    <form th:action="${modoEdicion != null and modoEdicion} ? @{/admin/categorias/actualizar/{id}(id=${categoria.idCategoria})} : @{/admin/categorias/guardar}"
-                                                          th:object="${categoria}"
-                                                          method="post"
-                                                          enctype="multipart/form-data">
-
-                                                        <div class="row g-3">
-                                                            <div class="col-md-6">
-                                                                <label class="form-label">Nombre</label>
-                                                                <input type="text" class="form-control" th:field="*{nombre}" required>
-                                                            </div>
-
-                                                            <div class="col-md-3">
-                                                                <label class="form-label">Actividad</label>
-                                                                <select class="form-select" th:field="*{actividad}" required>
-                                                                    <option value="">Seleccione</option>
-                                                                    <option value="activo">Activo</option>
-                                                                    <option value="inactivo">Inactivo</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="col-md-3">
-                                                                <label class="form-label">Imagen</label>
-                                                                <input type="file" class="form-control" name="imagenFile" accept="image/*">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="mt-4 d-flex gap-2">
-                                                            <button type="submit" class="btn btn-danger"
-                                                                    th:text="${modoEdicion != null and modoEdicion} ? 'Actualizar' : 'Guardar'">
-                                                                Guardar
-                                                            </button>
-
-                                                            <a th:if="${modoEdicion != null and modoEdicion}"
-                                                               th:href="@{/admin/categorias}"
-                                                               class="btn btn-secondary">
-                                                                Cancelar
-                                                            </a>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- LISTADO -->
-                                        <div class="row g-4">
-                                            <div class="col-md-6 col-xl-4" th:each="categoria : ${categorias}">
-                                                <div class="admin-card h-100">
-
-                                                    <img th:if="${categoria.imagen != null and !#strings.isEmpty(categoria.imagen)}"
-                                                         th:src="${categoria.imagen}"
-                                                         class="admin-card-img"
-                                                         alt="Imagen de categoría">
-
-                                                    <img th:if="${categoria.imagen == null or #strings.isEmpty(categoria.imagen)}"
-                                                         th:src="@{/img/nosotros.png}"
-                                                         class="admin-card-img"
-                                                         alt="Imagen por defecto">
-
-                                                    <div class="admin-card-body">
-                                                        <h5 class="admin-card-title" th:text="${categoria.nombre}">Nombre Categoría</h5>
-
-                                                        <p class="admin-card-text">
-                                                            Estado:
-                                                            <span th:if="${categoria.actividad == 'activo'}" class="badge text-bg-success">Activo</span>
-                                                            <span th:if="${categoria.actividad == 'inactivo'}" class="badge text-bg-secondary">Inactivo</span>
-                                                        </p>
-
-                                                        <p class="admin-card-text">
-                                                            Productos asociados:
-                                                            <strong th:text="${categoria.productos != null ? #lists.size(categoria.productos) : 0}">0</strong>
-                                                        </p>
-
-                                                        <div class="admin-card-actions">
-                                                            <a th:href="@{/admin/categorias/editar/{id}(id=${categoria.idCategoria})}"
-                                                               class="btn btn-outline-warning btn-sm">
-                                                                Editar
-                                                            </a>
-
-                                                            <a th:href="@{/admin/categorias/eliminar/{id}(id=${categoria.idCategoria})}"
-                                                               class="btn btn-outline-danger btn-sm"
-                                                               onclick="return confirm('¿Seguro que deseas eliminar esta categoría?');">
-                                                                Eliminar
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Mensaje si no hay categorías -->
-                                            <div class="col-12" th:if="${#lists.isEmpty(categorias)}">
-                                                <div class="alert alert-light border text-center">
-                                                    No hay categorías registradas.
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <a href="#" class="btn btn-danger" data-bs-toggle="collapse" data-bs-target="#formCategoria">
+                                            <i class="fa-solid fa-plus me-2"></i>Nueva Categoría
+                                        </a>
                                     </div>
 
-                                    <!-- PRODUCTOS -->
-                                    <div th:if="${seccion == 'productos' or seccion == 'nuevoProducto' or seccion == 'editarProducto' or seccion == 'inventarioProducto'}">
-
-                                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-                                            <div>
-                                                <h2 class="admin-title mb-1">Gestión de Productos</h2>
-                                                <p class="admin-text mb-0">
-                                                    Administra los productos disponibles en el catálogo.
-                                                </p>
-                                            </div>
-
-                                            <a th:href="@{/admin/productos/nuevo}" class="btn btn-danger">
-                                                <i class="fa-solid fa-plus me-2"></i>Nuevo Producto
-                                            </a>
-                                        </div>
-
-                                        <!-- FORMULARIO NUEVO PRODUCTO -->
-                                        <div th:if="${seccion == 'nuevoProducto'}" class="card shadow-sm border-0 mb-4">
+                                    <!-- FORMULARIO CREAR / EDITAR -->
+                                    <div class="collapse mb-4"
+                                         id="formCategoria"
+                                         th:classappend="${modoEdicion != null and modoEdicion} ? ' show' : ''">
+                                        <div class="card shadow-sm border-0">
                                             <div class="card-body">
-                                                <h4 class="mb-3">Registrar Producto</h4>
+                                                <h4 class="mb-3"
+                                                    th:text="${modoEdicion != null and modoEdicion} ? 'Editar Categoría' : 'Registrar Categoría'">
+                                                    Registrar Categoría
+                                                </h4>
 
-                                                <form th:action="@{/admin/productos/guardar}"
-                                                      th:object="${producto}"
+                                                <form th:action="${modoEdicion != null and modoEdicion} ? @{/admin/categorias/actualizar/{id}(id=${categoria.idCategoria})} : @{/admin/categorias/guardar}"
+                                                      th:object="${categoria}"
                                                       method="post"
                                                       enctype="multipart/form-data">
 
@@ -244,227 +126,370 @@
                                                             <input type="text" class="form-control" th:field="*{nombre}" required>
                                                         </div>
 
-                                                        <div class="col-md-6">
-                                                            <label class="form-label">Categoría</label>
-                                                            <select class="form-select" name="idCategoria" required>
-                                                                <option value="">Seleccione una categoría</option>
-                                                                <option th:each="categoria : ${categorias}"
-                                                                        th:value="${categoria.idCategoria}"
-                                                                        th:text="${categoria.nombre}">
-                                                                </option>
+                                                        <div class="col-md-3">
+                                                            <label class="form-label">Actividad</label>
+                                                            <select class="form-select" th:field="*{actividad}" required>
+                                                                <option value="">Seleccione</option>
+                                                                <option value="activo">Activo</option>
+                                                                <option value="inactivo">Inactivo</option>
                                                             </select>
                                                         </div>
 
-                                                        <div class="col-md-4">
-                                                            <label class="form-label">Precio Unitario</label>
-                                                            <input type="number" step="0.01" min="0" class="form-control" th:field="*{precioUnitario}" required>
-                                                        </div>
-
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-3">
                                                             <label class="form-label">Imagen</label>
                                                             <input type="file" class="form-control" name="imagenFile" accept="image/*">
                                                         </div>
-
-                                                        <div class="col-12">
-                                                            <label class="form-label">Descripción</label>
-                                                            <textarea class="form-control" th:field="*{descripcion}" rows="3" maxlength="150" required></textarea>
-                                                        </div>
                                                     </div>
 
                                                     <div class="mt-4 d-flex gap-2">
-                                                        <button type="submit" class="btn btn-danger">Guardar</button>
-                                                        <a th:href="@{/admin/productos}" class="btn btn-secondary">Cancelar</a>
+                                                        <button type="submit" class="btn btn-danger"
+                                                                th:text="${modoEdicion != null and modoEdicion} ? 'Actualizar' : 'Guardar'">
+                                                            Guardar
+                                                        </button>
+
+                                                        <a th:if="${modoEdicion != null and modoEdicion}"
+                                                           th:href="@{/admin/categorias}"
+                                                           class="btn btn-secondary">
+                                                            Cancelar
+                                                        </a>
                                                     </div>
                                                 </form>
-                                            </div>
-                                        </div>
-
-                                        <!-- FORMULARIO EDITAR PRODUCTO -->
-                                        <div th:if="${seccion == 'editarProducto'}" class="card shadow-sm border-0 mb-4">
-                                            <div class="card-body">
-                                                <h4 class="mb-3">Editar Producto</h4>
-
-                                                <form th:action="@{/admin/productos/editar/{id}(id=${producto.idProducto})}"
-                                                      method="post"
-                                                      enctype="multipart/form-data">
-
-                                                    <div class="row g-3">
-                                                        <div class="col-md-6">
-                                                            <label class="form-label">Nombre</label>
-                                                            <input type="text" class="form-control" name="nombre" th:value="${producto.nombre}" required>
-                                                        </div>
-
-                                                        <div class="col-md-6">
-                                                            <label class="form-label">Imagen</label>
-                                                            <input type="file" class="form-control" name="imagenFile" accept="image/*">
-                                                        </div>
-
-                                                        <div class="col-12">
-                                                            <label class="form-label">Descripción</label>
-                                                            <textarea class="form-control" name="descripcion" rows="3" maxlength="150" required
-                                                                      th:text="${producto.descripcion}"></textarea>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="mt-3" th:if="${producto.imagen != null and !#strings.isEmpty(producto.imagen)}">
-                                                        <p class="mb-2"><strong>Imagen actual:</strong></p>
-                                                        <img th:src="${producto.imagen}" alt="Imagen actual del producto"
-                                                             class="img-fluid rounded" style="max-width: 220px;">
-                                                    </div>
-
-                                                    <div class="mt-4 d-flex gap-2">
-                                                        <button type="submit" class="btn btn-warning">Actualizar</button>
-                                                        <a th:href="@{/admin/productos}" class="btn btn-secondary">Cancelar</a>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-
-                                        <!-- FORMULARIO INVENTARIO -->
-                                        <div th:if="${seccion == 'inventarioProducto'}" class="card shadow-sm border-0 mb-4">
-                                            <div class="card-body">
-                                                <h4 class="mb-3">
-                                                    Agregar existencias a:
-                                                    <span th:text="${producto.nombre}">Producto</span>
-                                                </h4>
-
-                                                <form th:action="@{/admin/productos/agregarExistencia}" method="post">
-                                                    <input type="hidden" name="idProducto" th:value="${producto.idProducto}">
-
-                                                    <div class="row g-3">
-                                                        <div class="col-md-6">
-                                                            <label class="form-label">Talla</label>
-                                                            <select class="form-select" name="idTalla" required>
-                                                                <option value="">Seleccione una talla</option>
-                                                                <option th:each="talla : ${tallas}"
-                                                                        th:value="${talla.idTalla}"
-                                                                        th:text="${talla.nombreTalla}">
-                                                                </option>
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="col-md-6">
-                                                            <label class="form-label">Cantidad a agregar</label>
-                                                            <input type="number" min="1" class="form-control" name="cantidad" required>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="mt-4 d-flex gap-2">
-                                                        <button type="submit" class="btn btn-secondary">Agregar existencia</button>
-                                                        <a th:href="@{/admin/productos}" class="btn btn-outline-secondary">Volver</a>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-
-                                        <!-- LISTADO DE PRODUCTOS -->
-                                        <div class="row g-4" th:if="${seccion == 'productos'}">
-                                            <div class="col-md-6 col-xl-4" th:each="producto : ${productos}">
-                                                <div class="admin-card h-100">
-
-                                                    <img th:if="${producto.imagen != null and !#strings.isEmpty(producto.imagen)}"
-                                                         th:src="${producto.imagen}"
-                                                         class="admin-card-img"
-                                                         alt="Imagen de producto">
-
-                                                    <img th:if="${producto.imagen == null or #strings.isEmpty(producto.imagen)}"
-                                                         th:src="@{/img/nosotros.png}"
-                                                         class="admin-card-img"
-                                                         alt="Imagen por defecto">
-
-                                                    <div class="admin-card-body">
-                                                        <h5 class="admin-card-title" th:text="${producto.nombre}">Nombre Producto</h5>
-
-                                                        <p class="admin-card-text mb-1">
-                                                            <strong>Precio:</strong>
-                                                            ₡<span th:text="${#numbers.formatDecimal(producto.precioUnitario, 1, 'COMMA', 2, 'POINT')}">0.00</span>
-                                                        </p>
-
-                                                        <p class="admin-card-text mb-1">
-                                                            <strong>Stock general:</strong>
-                                                            <span th:text="${producto.cantidadExistencia}">0</span>
-                                                        </p>
-
-                                                        <p class="admin-card-text mb-1">
-                                                            <strong>Categoría:</strong>
-                                                            <span th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">Categoría</span>
-                                                        </p>
-
-                                                        <p class="admin-card-text mb-2">
-                                                            <strong>Descripción:</strong>
-                                                            <span th:text="${producto.descripcion}">Descripción del producto</span>
-                                                        </p>
-
-                                                        <div class="admin-card-actions d-flex flex-wrap gap-2">
-                                                            <a th:href="@{/admin/productos/editar/{id}(id=${producto.idProducto})}"
-                                                               class="btn btn-outline-warning btn-sm">
-                                                                Editar
-                                                            </a>
-
-                                                            <a th:href="@{/admin/productos/{id}/inventario(id=${producto.idProducto})}"
-                                                               class="btn btn-outline-secondary btn-sm">
-                                                                Inventario
-                                                            </a>
-
-                                                            <a th:href="@{/admin/productos/eliminar/{id}(id=${producto.idProducto})}"
-                                                               class="btn btn-outline-danger btn-sm"
-                                                               onclick="return confirm('¿Seguro que deseas eliminar este producto?');">
-                                                                Eliminar
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Mensaje si no hay productos -->
-                                            <div class="col-12" th:if="${#lists.isEmpty(productos)}">
-                                                <div class="alert alert-light border text-center">
-                                                    No hay productos registrados.
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- TRANSACCIONES -->
-                                    <div th:if="${seccion == 'transacciones'}">
-                                        <div class="mb-4">
-                                            <h2 class="admin-title mb-1">Gestión de Transacciones</h2>
+                                    <!-- LISTADO -->
+                                    <div class="row g-4">
+                                        <div class="col-md-6 col-xl-4" th:each="categoria : ${categorias}">
+                                            <div class="admin-card h-100">
+
+                                                <img th:if="${categoria.imagen != null and !#strings.isEmpty(categoria.imagen)}"
+                                                     th:src="${categoria.imagen}"
+                                                     class="admin-card-img"
+                                                     alt="Imagen de categoría">
+
+                                                <img th:if="${categoria.imagen == null or #strings.isEmpty(categoria.imagen)}"
+                                                     th:src="@{/img/nosotros.png}"
+                                                     class="admin-card-img"
+                                                     alt="Imagen por defecto">
+
+                                                <div class="admin-card-body">
+                                                    <h5 class="admin-card-title" th:text="${categoria.nombre}">Nombre Categoría</h5>
+
+                                                    <p class="admin-card-text">
+                                                        Estado:
+                                                        <span th:if="${categoria.actividad == 'activo'}" class="badge text-bg-success">Activo</span>
+                                                        <span th:if="${categoria.actividad == 'inactivo'}" class="badge text-bg-secondary">Inactivo</span>
+                                                    </p>
+
+                                                    <p class="admin-card-text">
+                                                        Productos asociados:
+                                                        <strong th:text="${categoria.productos != null ? #lists.size(categoria.productos) : 0}">0</strong>
+                                                    </p>
+
+                                                    <div class="admin-card-actions">
+                                                        <a th:href="@{/admin/categorias/editar/{id}(id=${categoria.idCategoria})}"
+                                                           class="btn btn-outline-warning btn-sm">
+                                                            Editar
+                                                        </a>
+
+                                                        <a th:href="@{/admin/categorias/eliminar/{id}(id=${categoria.idCategoria})}"
+                                                           class="btn btn-outline-danger btn-sm"
+                                                           onclick="return confirm('¿Seguro que deseas eliminar esta categoría?');">
+                                                            Eliminar
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Mensaje si no hay categorías -->
+                                        <div class="col-12" th:if="${#lists.isEmpty(categorias)}">
+                                            <div class="alert alert-light border text-center">
+                                                No hay categorías registradas.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- PRODUCTOS -->
+                                <div th:if="${seccion == 'productos' or seccion == 'nuevoProducto' or seccion == 'editarProducto' or seccion == 'inventarioProducto'}">
+
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+                                        <div>
+                                            <h2 class="admin-title mb-1">Gestión de Productos</h2>
                                             <p class="admin-text mb-0">
-                                                Consulta las compras y movimientos realizados por los usuarios.
+                                                Administra los productos disponibles en el catálogo.
                                             </p>
                                         </div>
 
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered table-hover align-middle admin-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>ID Pedido</th>
-                                                        <th>Usuario</th>
-                                                        <th>Total</th>
-                                                        <th>Detalle</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>Luciano</td>
-                                                        <td>₡35,000</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-outline-primary btn-sm">Ver</a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        <a th:href="@{/admin/productos/nuevo}" class="btn btn-danger">
+                                            <i class="fa-solid fa-plus me-2"></i>Nuevo Producto
+                                        </a>
+                                    </div>
+
+                                    <!-- FORMULARIO NUEVO PRODUCTO -->
+                                    <div th:if="${seccion == 'nuevoProducto'}" class="card shadow-sm border-0 mb-4">
+                                        <div class="card-body">
+                                            <h4 class="mb-3">Registrar Producto</h4>
+
+                                            <form th:action="@{/admin/productos/guardar}"
+                                                  th:object="${producto}"
+                                                  method="post"
+                                                  enctype="multipart/form-data">
+
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Nombre</label>
+                                                        <input type="text" class="form-control" th:field="*{nombre}" required>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Categoría</label>
+                                                        <select class="form-select" name="idCategoria" required>
+                                                            <option value="">Seleccione una categoría</option>
+                                                            <option th:each="categoria : ${categorias}"
+                                                                    th:value="${categoria.idCategoria}"
+                                                                    th:text="${categoria.nombre}">
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Precio Unitario</label>
+                                                        <input type="number" step="0.01" min="0" class="form-control" th:field="*{precioUnitario}" required>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">¿Tiene tallas?</label>
+                                                        <select class="form-select" th:field="*{tieneTalla}" required>
+                                                            <option value="">Seleccione una opción</option>
+                                                            <option th:value="true">Sí</option>
+                                                            <option th:value="false">No</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">Imagen</label>
+                                                        <input type="file" class="form-control" name="imagenFile" accept="image/*">
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <label class="form-label">Descripción</label>
+                                                        <textarea class="form-control" th:field="*{descripcion}" rows="3" maxlength="150" required></textarea>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mt-4 d-flex gap-2">
+                                                    <button type="submit" class="btn btn-danger">Guardar</button>
+                                                    <a th:href="@{/admin/productos}" class="btn btn-secondary">Cancelar</a>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
 
+                                    <!-- FORMULARIO EDITAR PRODUCTO -->
+                                    <div th:if="${seccion == 'editarProducto'}" class="card shadow-sm border-0 mb-4">
+                                        <div class="card-body">
+                                            <h4 class="mb-3">Editar Producto</h4>
+
+                                            <form th:action="@{/admin/productos/editar/{id}(id=${producto.idProducto})}"
+                                                  method="post"
+                                                  enctype="multipart/form-data">
+
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Nombre</label>
+                                                        <input type="text" class="form-control" name="nombre" th:value="${producto.nombre}" required>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Imagen</label>
+                                                        <input type="file" class="form-control" name="imagenFile" accept="image/*">
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <label class="form-label">Descripción</label>
+                                                        <textarea class="form-control" name="descripcion" rows="3" maxlength="150" required
+                                                                  th:text="${producto.descripcion}"></textarea>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mt-3" th:if="${producto.imagen != null and !#strings.isEmpty(producto.imagen)}">
+                                                    <p class="mb-2"><strong>Imagen actual:</strong></p>
+                                                    <img th:src="${producto.imagen}" alt="Imagen actual del producto"
+                                                         class="img-fluid rounded" style="max-width: 220px;">
+                                                </div>
+
+                                                <div class="mt-4 d-flex gap-2">
+                                                    <button type="submit" class="btn btn-warning">Actualizar</button>
+                                                    <a th:href="@{/admin/productos}" class="btn btn-secondary">Cancelar</a>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <!-- FORMULARIO INVENTARIO -->
+                                    <div th:if="${seccion == 'inventarioProducto'}" class="card shadow-sm border-0 mb-4">
+                                        <div class="card-body">
+                                            <h4 class="mb-3">
+                                                Agregar existencias a:
+                                                <span th:text="${producto.nombre}">Producto</span>
+                                            </h4>
+                                            <p class="mb-3">
+                                                <strong>Configuración del producto:</strong>
+                                                <span th:text="${producto.tieneTalla ? 'Este producto maneja tallas' : 'Este producto no maneja tallas'}"></span>
+                                            </p>
+                                            <div th:if="${errorInventario != null}" class="alert alert-danger">
+                                                <span th:text="${errorInventario}"></span>
+                                            </div>
+
+                                            <div th:if="${mensajeExito != null}" class="alert alert-success">
+                                                <span th:text="${mensajeExito}"></span>
+                                            </div>
+                                            <form th:action="@{/admin/productos/agregarExistencia}" method="post">
+                                                <input type="hidden" name="idProducto" th:value="${producto.idProducto}">
+
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Talla</label>
+                                                        <select class="form-select" name="idTalla" required>
+                                                            <option value="">Seleccione una talla</option>
+                                                            <option th:each="talla : ${tallas}"
+                                                                    th:value="${talla.idTalla}"
+                                                                    th:text="${talla.nombreTalla}">
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Cantidad a agregar</label>
+                                                        <input type="number" min="1" class="form-control" name="cantidad" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mt-4 d-flex gap-2">
+                                                    <button type="submit" class="btn btn-secondary">Agregar existencia</button>
+                                                    <a th:href="@{/admin/productos}" class="btn btn-outline-secondary">Volver</a>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <!-- LISTADO DE PRODUCTOS -->
+                                    <div class="row g-4" th:if="${seccion == 'productos'}">
+                                        <div class="col-md-6 col-xl-4" th:each="producto : ${productos}">
+                                            <div class="admin-card h-100">
+
+                                                <img th:if="${producto.imagen != null and !#strings.isEmpty(producto.imagen)}"
+                                                     th:src="${producto.imagen}"
+                                                     class="admin-card-img"
+                                                     alt="Imagen de producto">
+
+                                                <img th:if="${producto.imagen == null or #strings.isEmpty(producto.imagen)}"
+                                                     th:src="@{/img/nosotros.png}"
+                                                     class="admin-card-img"
+                                                     alt="Imagen por defecto">
+
+                                                <div class="admin-card-body">
+                                                    <h5 class="admin-card-title" th:text="${producto.nombre}">Nombre Producto</h5>
+
+                                                    <p class="admin-card-text mb-1">
+                                                        <strong>Precio:</strong>
+                                                        ₡<span th:text="${#numbers.formatDecimal(producto.precioUnitario, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                                                    </p>
+
+                                                    <p class="admin-card-text mb-1">
+                                                        <strong>Stock general:</strong>
+                                                        <span th:text="${producto.cantidadExistencia}">0</span>
+                                                    </p>
+                                                    
+                                                    <p class="admin-card-text mb-1">
+                                                        <strong>Tiene tallas:</strong>
+                                                        <span th:text="${producto.tieneTalla ? 'Sí' : 'No'}">Sí</span>
+                                                    </p>
+
+                                                    <p class="admin-card-text mb-1">
+                                                        <strong>Categoría:</strong>
+                                                        <span th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">Categoría</span>
+                                                    </p>
+
+                                                    <p class="admin-card-text mb-2">
+                                                        <strong>Descripción:</strong>
+                                                        <span th:text="${producto.descripcion}">Descripción del producto</span>
+                                                    </p>
+
+                                                    <div class="admin-card-actions d-flex flex-wrap gap-2">
+                                                        <a th:href="@{/admin/productos/editar/{id}(id=${producto.idProducto})}"
+                                                           class="btn btn-outline-warning btn-sm">
+                                                            Editar
+                                                        </a>
+
+                                                        <a th:href="@{/admin/productos/{id}/inventario(id=${producto.idProducto})}"
+                                                           class="btn btn-outline-secondary btn-sm">
+                                                            Inventario
+                                                        </a>
+
+                                                        <a th:href="@{/admin/productos/eliminar/{id}(id=${producto.idProducto})}"
+                                                           class="btn btn-outline-danger btn-sm"
+                                                           onclick="return confirm('¿Seguro que deseas eliminar este producto?');">
+                                                            Eliminar
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Mensaje si no hay productos -->
+                                        <div class="col-12" th:if="${#lists.isEmpty(productos)}">
+                                            <div class="alert alert-light border text-center">
+                                                No hay productos registrados.
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <!-- TRANSACCIONES -->
+                                <div th:if="${seccion == 'transacciones'}">
+                                    <div class="mb-4">
+                                        <h2 class="admin-title mb-1">Gestión de Transacciones</h2>
+                                        <p class="admin-text mb-0">
+                                            Consulta las compras y movimientos realizados por los usuarios.
+                                        </p>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover align-middle admin-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID Pedido</th>
+                                                    <th>Usuario</th>
+                                                    <th>Total</th>
+                                                    <th>Detalle</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>Luciano</td>
+                                                    <td>₡35,000</td>
+                                                    <td>
+                                                        <a href="#" class="btn btn-outline-primary btn-sm">Ver</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
                             </div>
-
                         </div>
-                    </div>
 
+                    </div>
                 </div>
+
+            </div>
         </main>
 
         <div th:replace="~{general/fragmentosGeneral :: footer}"></div>
