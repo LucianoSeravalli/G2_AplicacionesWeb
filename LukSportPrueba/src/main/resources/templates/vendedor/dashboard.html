@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Vendedor | Luk Sport Center</title>
+
+        <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    </head>
+    <body>
+        <div th:replace="~{general/fragmentosGeneral :: header}"></div>
+
+        <main class="main-content">
+            <div class="container py-5">
+                <div class="admin-panel">
+                    <div class="row g-4">
+
+                        <!-- SUBMENU -->
+                        <div class="col-lg-3">
+                            <div class="admin-sidebar shadow-sm">
+                                <h3 class="admin-sidebar-title">
+                                    <i class="fa-solid fa-store me-2"></i>Panel Vendedor
+                                </h3>
+
+                                <div class="admin-menu">
+                                    <a th:href="@{/vendedor}"
+                                       class="admin-menu-link"
+                                       th:classappend="${seccion == 'inicio'} ? ' active' : ''">
+                                        <i class="fa-solid fa-house me-2"></i>Inicio
+                                    </a>
+
+                                    <a th:href="@{/vendedor/productos}"
+                                       class="admin-menu-link"
+                                       th:classappend="${seccion == 'productos' or seccion == 'inventarioProducto'} ? ' active' : ''">
+                                        <i class="fa-solid fa-box-open me-2"></i>Inventario
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CONTENIDO -->
+                        <div class="col-lg-9">
+                            <div class="admin-content shadow-sm">
+
+                                <!-- INICIO -->
+                                <div th:if="${seccion == 'inicio'}">
+                                    <div class="admin-header-box">
+                                        <h2 class="admin-title">Bienvenido al Panel de Vendedor</h2>
+                                        <p class="admin-text">
+                                            Desde este apartado podrás consultar el inventario disponible, actualizar
+                                            existencias de los productos, sumar o descontar cantidades según los
+                                            movimientos realizados y mantener un control ordenado del stock para apoyar
+                                            la operación diaria de Luk Sport Center.
+                                        </p>
+                                    </div>
+
+                                    <div class="row align-items-center g-4 mt-2">
+                                        <div class="col-md-6">
+                                            <img th:src="@{/img/vendedor.jpg}"
+                                                 alt="Panel de vendedor"
+                                                 class="img-fluid admin-img">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="admin-info-card">
+                                                <h4 class="mb-3">¿Qué puedes hacer aquí?</h4>
+                                                <ul class="admin-list">
+                                                    <li>Consultar inventario disponible</li>
+                                                    <li>Sumar existencias por talla</li>
+                                                    <li>Descontar productos vendidos</li>
+                                                    <li>Mantener actualizado el stock</li>
+                                                    <li>Apoyar la operación diaria de ventas</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- PRODUCTOS -->
+                                <div th:if="${seccion == 'productos'}">
+                                    <div class="mb-4">
+                                        <h2 class="admin-title mb-1">Inventario de Productos</h2>
+                                        <p class="admin-text mb-0">
+                                            Consulta los productos y administra sus existencias por talla.
+                                        </p>
+                                    </div>
+
+                                    <div class="row g-4">
+                                        <div class="col-md-6 col-xl-4" th:each="producto : ${productos}">
+                                            <div class="admin-card h-100">
+
+                                                <img th:if="${producto.imagen != null and !#strings.isEmpty(producto.imagen)}"
+                                                     th:src="${producto.imagen}"
+                                                     class="admin-card-img"
+                                                     alt="Imagen de producto">
+
+                                                <img th:if="${producto.imagen == null or #strings.isEmpty(producto.imagen)}"
+                                                     th:src="@{/img/nosotros.png}"
+                                                     class="admin-card-img"
+                                                     alt="Imagen por defecto">
+
+                                                <div class="admin-card-body">
+                                                    <h5 class="admin-card-title" th:text="${producto.nombre}">Producto</h5>
+
+                                                    <p class="admin-card-text mb-1">
+                                                        <strong>Stock general:</strong>
+                                                        <span th:text="${producto.cantidadExistencia}">0</span>
+                                                    </p>
+
+                                                    <p class="admin-card-text mb-1">
+                                                        <strong>Tiene tallas:</strong>
+                                                        <span th:text="${producto.tieneTalla ? 'Sí' : 'No'}">Sí</span>
+                                                    </p>
+
+                                                    <p class="admin-card-text mb-1">
+                                                        <strong>Categoría:</strong>
+                                                        <span th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">Categoría</span>
+                                                    </p>
+
+                                                    <div class="admin-card-actions">
+                                                        <a th:href="@{/vendedor/productos/{id}/inventario(id=${producto.idProducto})}"
+                                                           class="btn btn-outline-secondary btn-sm">
+                                                            Gestionar inventario
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12" th:if="${#lists.isEmpty(productos)}">
+                                            <div class="alert alert-light border text-center">
+                                                No hay productos registrados.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- INVENTARIO -->
+                                <div th:if="${seccion == 'inventarioProducto'}">
+                                    <div class="card shadow-sm border-0 mb-4">
+                                        <div class="card-body">
+                                            <h4 class="mb-3">
+                                                Gestionar inventario de:
+                                                <span th:text="${producto.nombre}">Producto</span>
+                                            </h4>
+
+                                            <p class="mb-3">
+                                                <strong>Configuración:</strong>
+                                                <span th:if="${producto.tieneTalla}" class="badge text-bg-success">
+                                                    Producto con tallas
+                                                </span>
+                                                <span th:if="${!producto.tieneTalla}" class="badge text-bg-secondary">
+                                                    Producto sin tallas
+                                                </span>
+                                            </p>
+
+                                            <div th:if="${errorInventario != null}" class="alert alert-danger">
+                                                <span th:text="${errorInventario}"></span>
+                                            </div>
+
+                                            <div th:if="${mensajeExito != null}" class="alert alert-success">
+                                                <span th:text="${mensajeExito}"></span>
+                                            </div>
+
+                                            <div class="row g-4">
+                                                <div class="col-md-6">
+                                                    <form th:action="@{/vendedor/productos/agregarExistencia}" method="post">
+                                                        <input type="hidden" name="idProducto" th:value="${producto.idProducto}">
+
+                                                        <h5 class="mb-3 text-success">Sumar existencias</h5>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Talla</label>
+                                                            <select class="form-select" name="idTalla" required>
+                                                                <option value="">Seleccione una talla</option>
+                                                                <option th:each="talla : ${tallas}"
+                                                                        th:value="${talla.idTalla}"
+                                                                        th:text="${talla.nombreTalla}">
+                                                                </option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Cantidad</label>
+                                                            <input type="number" min="1" class="form-control" name="cantidad" required>
+                                                        </div>
+
+                                                        <button type="submit" class="btn btn-success">Sumar</button>
+                                                    </form>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <form th:action="@{/vendedor/productos/quitarExistencia}" method="post">
+                                                        <input type="hidden" name="idProducto" th:value="${producto.idProducto}">
+
+                                                        <h5 class="mb-3 text-danger">Quitar existencias</h5>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Talla</label>
+                                                            <select class="form-select" name="idTalla" required>
+                                                                <option value="">Seleccione una talla</option>
+                                                                <option th:each="talla : ${tallas}"
+                                                                        th:value="${talla.idTalla}"
+                                                                        th:text="${talla.nombreTalla}">
+                                                                </option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Cantidad</label>
+                                                            <input type="number" min="1" class="form-control" name="cantidad" required>
+                                                        </div>
+
+                                                        <button type="submit" class="btn btn-danger">Quitar</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-4">
+                                                <a th:href="@{/vendedor/productos}" class="btn btn-secondary">Volver</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        </main>
+
+                        <div th:replace="~{general/fragmentosGeneral :: footer}"></div>
+                        <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
+                        </body>
+                        </html>

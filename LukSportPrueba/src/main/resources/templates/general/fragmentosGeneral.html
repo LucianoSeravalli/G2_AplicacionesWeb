@@ -44,6 +44,14 @@
                         Administración
                     </a>
 
+                    <a th:if="${session.usuarioSesion != null 
+                       and session.usuarioSesion.rol != null 
+                       and (session.usuarioSesion.rol.idRol == 2 or session.usuarioSesion.rol.idRol == 3)}"
+                       th:href="@{/vendedor}"
+                       class="nav-link">
+                        Vendedor
+                    </a>
+
                 </nav>
             </div>
         </header>

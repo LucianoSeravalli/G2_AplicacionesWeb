@@ -16,26 +16,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-
-
 @Service
 public class ProductoService {
-    
+
     @Autowired
     private FireBaseStorageService fireBaseStorageService;
-    
+
     @Autowired
     private CantidadProductoTallaRepository cantidadProductoTallaRepository;
-    
+
     @Autowired
     private TallaProductoRepository tallaProductoRepository;
 
     @Autowired
     private ProductoRepository productoRepository;
-    
+
     @Autowired
     private CategoriaRepository categoriaRepository;
-    
+
 //    private boolean hayTallasDeEseProducto(int idProducto, int idTalla) {
 //        boolean existeTalla = false;
 //        cantidadProductoTalla = cantidadProductoTallaRepository.findByProducto_IdProductoAndTalla_IdTalla(idProducto, idTalla);
@@ -44,9 +42,7 @@ public class ProductoService {
 //        }
 //        return existeTalla;
 //    }
-    
-    
-        public List<Producto> listarProductos() {
+    public List<Producto> listarProductos() {
         try {
             return productoRepository.findAll();
         } catch (Exception ex) {
@@ -55,8 +51,7 @@ public class ProductoService {
             return List.of();
         }
     }
-        
-        
+
     public Producto guardarProducto(Producto producto, MultipartFile imagenFile, Integer idCategoria) {
         try {
             // 🔹 Buscar la categoría
@@ -79,7 +74,7 @@ public class ProductoService {
                 productoGuardado = productoRepository.save(productoGuardado);
             }
             return productoGuardado;
-            
+
         } catch (IOException ex) {
             System.out.println("Error al subir imagen de producto a Firebase: " + ex.getMessage());
             ex.printStackTrace();
@@ -90,7 +85,7 @@ public class ProductoService {
             return null;
         }
     }
-    
+
     public Producto editarProducto(Integer idProducto, String nombre, String descripcion, MultipartFile imagenFile) {
         try {
 
@@ -127,7 +122,7 @@ public class ProductoService {
             return null;
         }
     }
-    
+
     public void eliminarProducto(Integer idProducto) {
         try {
             Producto producto = productoRepository.findById(idProducto).orElse(null);
@@ -144,14 +139,33 @@ public class ProductoService {
             ex.printStackTrace();
         }
     }
-    
-    public CantidadProductoTalla agregarExistenciaProductoTalla(Integer idProducto, Integer idTalla, Integer cantidadAgregar) {
-        try {
-            Producto producto = productoRepository.findById(idProducto).orElse(null);
-            TallaProducto talla = tallaProductoRepository.findById(idTalla).orElse(null);
 
-            if (producto == null || talla == null) {
-                return null;
+    public String agregarExistenciaProductoTalla(Integer idProducto, Integer idTalla, Integer cantidadAgregar) {
+        try {
+            if (cantidadAgregar == null || cantidadAgregar <= 0) {
+                return "La cantidad a agregar debe ser mayor a 0";
+            }
+
+            Producto producto = productoRepository.findById(idProducto).orElse(null);
+            if (producto == null) {
+                return "Producto no encontrado";
+            }
+
+            TallaProducto talla = tallaProductoRepository.findById(idTalla).orElse(null);
+            if (talla == null) {
+                return "Talla no encontrada";
+            }
+
+            String nombreTalla = talla.getNombreTalla();
+
+            if (Boolean.FALSE.equals(producto.getTieneTalla())
+                    && !"Este producto no tiene tallas".equalsIgnoreCase(nombreTalla)) {
+                return "Error: este producto fue registrado sin tallas. Debe usar la opción 'Este producto no tiene tallas'.";
+            }
+
+            if (Boolean.TRUE.equals(producto.getTieneTalla())
+                    && "Este producto no tiene tallas".equalsIgnoreCase(nombreTalla)) {
+                return "Error: este producto sí maneja tallas. Debe seleccionar una talla válida.";
             }
 
             CantidadProductoTalla existencia = cantidadProductoTallaRepository
@@ -168,7 +182,7 @@ public class ProductoService {
             }
 
             cantidadProductoTallaRepository.save(existencia);
-            
+
             int total = cantidadProductoTallaRepository.findAll().stream()
                     .filter(e -> e.getProducto().getIdProducto().equals(idProducto))
                     .mapToInt(CantidadProductoTalla::getExistencia)
@@ -177,15 +191,15 @@ public class ProductoService {
             producto.setCantidadExistencia(total);
             productoRepository.save(producto);
 
-            return existencia;
+            return "ok";
 
         } catch (Exception ex) {
+            System.out.println("Error al agregar existencia por talla: " + ex.getMessage());
             ex.printStackTrace();
-            return null;
+            return "Error interno al agregar existencia";
         }
     }
-    
-    
+
     public Producto obtenerProductoPorId(Integer idProducto) {
         try {
             return productoRepository.findById(idProducto).orElse(null);
@@ -193,6 +207,66 @@ public class ProductoService {
             System.out.println("Error al obtener producto por id: " + ex.getMessage());
             ex.printStackTrace();
             return null;
+        }
+    }
+
+    public String quitarExistenciaProductoTalla(Integer idProducto, Integer idTalla, Integer cantidadQuitar) {
+        try {
+            if (cantidadQuitar == null || cantidadQuitar <= 0) {
+                return "La cantidad a quitar debe ser mayor a 0";
+            }
+
+            Producto producto = productoRepository.findById(idProducto).orElse(null);
+            if (producto == null) {
+                return "Producto no encontrado";
+            }
+
+            TallaProducto talla = tallaProductoRepository.findById(idTalla).orElse(null);
+            if (talla == null) {
+                return "Talla no encontrada";
+            }
+
+            String nombreTalla = talla.getNombreTalla();
+
+            if (Boolean.FALSE.equals(producto.getTieneTalla())
+                    && !"Este producto no tiene tallas".equalsIgnoreCase(nombreTalla)) {
+                return "Error: este producto fue registrado sin tallas. Debe usar la opción 'Este producto no tiene tallas'.";
+            }
+
+            if (Boolean.TRUE.equals(producto.getTieneTalla())
+                    && "Este producto no tiene tallas".equalsIgnoreCase(nombreTalla)) {
+                return "Error: este producto sí maneja tallas. Debe seleccionar una talla válida.";
+            }
+
+            CantidadProductoTalla existencia = cantidadProductoTallaRepository
+                    .findByProducto_IdProductoAndTalla_IdTalla(idProducto, idTalla)
+                    .orElse(null);
+
+            if (existencia == null) {
+                return "No existe inventario registrado para esa talla";
+            }
+
+            if (existencia.getExistencia() < cantidadQuitar) {
+                return "No hay suficiente inventario para descontar esa cantidad";
+            }
+
+            existencia.setExistencia(existencia.getExistencia() - cantidadQuitar);
+            cantidadProductoTallaRepository.save(existencia);
+
+            int total = cantidadProductoTallaRepository.findAll().stream()
+                    .filter(e -> e.getProducto().getIdProducto().equals(idProducto))
+                    .mapToInt(CantidadProductoTalla::getExistencia)
+                    .sum();
+
+            producto.setCantidadExistencia(total);
+            productoRepository.save(producto);
+
+            return "ok";
+
+        } catch (Exception ex) {
+            System.out.println("Error al quitar existencia por talla: " + ex.getMessage());
+            ex.printStackTrace();
+            return "Error interno al quitar existencia";
         }
     }
 
