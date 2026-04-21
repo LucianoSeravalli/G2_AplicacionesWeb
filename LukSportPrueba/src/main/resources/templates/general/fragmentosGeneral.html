@@ -34,8 +34,10 @@
 
                 <nav class="navbar-right">
                     <a th:href="@{/categorias}" class="nav-link">Categorías</a>
+                    <a th:href="@{/productos}" class="nav-link">Productos</a>
                     <a th:href="@{/carrito}" class="nav-link">Carrito</a>
 
+                    
                     <a th:if="${session.usuarioSesion != null 
                        and session.usuarioSesion.rol != null 
                        and session.usuarioSesion.rol.idRol == 2}"
