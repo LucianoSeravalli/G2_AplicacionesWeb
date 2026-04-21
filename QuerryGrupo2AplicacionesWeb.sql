@@ -53,9 +53,14 @@ ADD COLUMN TokenVerificacion VARCHAR(255),
 ADD COLUMN FechaExpiracionToken DATETIME;
 
 -- UPDATE Usuario SET idRol = 2 WHERE idUsuario = 4;
+Insert into Usuario (idRol, Nombre,Contrasena, Imagen, FechaNacimiento, Correo, Activo, TokenVerificacion, FechaExpiracionToken) Values
+(3, "Vendedor", 123, "", "2007-04-28", "vendedor@gmail.com", true, "", null);
+
+Insert into Usuario (idRol, Nombre,Contrasena, Imagen, FechaNacimiento, Correo, Activo, TokenVerificacion, FechaExpiracionToken) Values
+ (2, "Aaron", 123, "", "2007-04-28", "aaron@gmail.com", true, "", null);
+
 
 Select * From Usuario;
-
 -- =========================
 -- TABLA PRODUCTO
 -- =========================
@@ -73,8 +78,12 @@ CREATE TABLE Producto (
 ) ENGINE=InnoDB;
 
 ALTER TABLE Producto
-ADD COLUMN Descripcion VARCHAR(150) NOT NULL;
+ADD COLUMN TieneTalla boolean;
+-- ADD COLUMN Descripcion VARCHAR(150) NOT NULL;
 
+select * from producto;
+
+Update producto set TieneTalla = true where IdProducto = 2;
 -- =========================
 -- TABLA PEDIDOS
 -- =========================
