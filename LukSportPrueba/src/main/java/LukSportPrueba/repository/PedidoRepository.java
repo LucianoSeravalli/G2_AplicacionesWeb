@@ -5,7 +5,10 @@
 package LukSportPrueba.repository;
 
 import LukSportPrueba.domain.Pedido;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
+
+    Optional<Pedido> findByUsuario_IdUsuarioAndEstado(Integer idUsuario, String estado);
 }

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito | Luk Sport Center</title>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" th:href="@{/css/carrito.css}">
+</head>
+<body>
+
+<div th:replace="~{general/fragmentosGeneral :: header}"></div>
+
+<main class="main-content">
+    <div class="container py-5">
+
+        <div class="carrito-box">
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                <div>
+                    <h2 class="carrito-title">
+                        <i class="fa-solid fa-cart-shopping me-2"></i>Mi Carrito
+                    </h2>
+                    <p class="carrito-text mb-0">
+                        Revisa los productos agregados antes de confirmar tu pedido.
+                    </p>
+                </div>
+
+                <a th:href="@{/productos}" class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Seguir comprando
+                </a>
+            </div>
+
+            <!-- MENSAJES -->
+            <div th:if="${mensaje != null}" class="alert alert-success">
+                <span th:text="${mensaje}"></span>
+            </div>
+
+            <div th:if="${error != null}" class="alert alert-danger">
+                <span th:text="${error}"></span>
+            </div>
+
+            <!-- CARRITO VACÍO -->
+            <div th:if="${#lists.isEmpty(itemsCarrito)}" class="alert alert-light border text-center">
+                No tienes productos agregados al carrito.
+            </div>
+
+            <!-- TABLA CARRITO -->
+            <div th:if="${!#lists.isEmpty(itemsCarrito)}" class="table-responsive">
+                <table class="table table-bordered align-middle carrito-table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Talla</th>
+                            <th>Entrega</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${itemsCarrito}">
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <img th:src="${item.producto.imagen != null ? item.producto.imagen : '/img/logo.png'}"
+                                         alt="Producto"
+                                         class="carrito-img">
+                                    <div>
+                                        <strong th:text="${item.producto.nombre}">Producto</strong>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td th:text="${item.talla != null ? item.talla.nombreTalla : 'N/A'}">Talla</td>
+
+                            <td th:text="${carrito != null ? carrito.tipoEntrega : 'N/A'}">Entrega</td>
+
+                            <td th:text="${item.cantidad}">1</td>
+
+                            <td>
+                                ₡<span th:text="${#numbers.formatDecimal(item.producto.precioUnitario, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                            </td>
+
+                            <td>
+                                ₡<span th:text="${#numbers.formatDecimal(item.producto.precioUnitario * item.cantidad, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- RESUMEN -->
+            <div th:if="${carrito != null and !#lists.isEmpty(itemsCarrito)}" class="carrito-resumen mt-4">
+                <div class="row g-4 align-items-center">
+                    <div class="col-md-6">
+                        <h4 class="mb-2">Resumen del pedido</h4>
+                        <p class="mb-1">
+                            <strong>Tipo de entrega:</strong>
+                            <span th:text="${carrito.tipoEntrega}">Entrega</span>
+                        </p>
+                        <p class="mb-0">
+                            <strong>Total:</strong>
+                            <span class="carrito-total">
+                                ₡<span th:text="${#numbers.formatDecimal(carrito.total, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="d-flex flex-wrap gap-2 justify-content-md-end">
+                            <form th:action="@{/carrito/cancelar}" method="post">
+                                <button type="submit" class="btn btn-outline-danger">
+                                    <i class="fa-solid fa-xmark me-2"></i>Cancelar pedido
+                                </button>
+                            </form>
+
+                            <form th:action="@{/carrito/pagar}" method="post">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fa-solid fa-credit-card me-2"></i>Pagar pedido
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{general/fragmentosGeneral :: footer}"></div>
+
+<script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

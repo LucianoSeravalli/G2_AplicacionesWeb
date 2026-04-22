@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package LukSportPrueba.domain;
 
 import jakarta.persistence.*;
@@ -18,13 +14,17 @@ public class PedidoProducto {
     private Integer idPedidosXProducto;
 
     @ManyToOne
-    @JoinColumn(name = "idPedidos")
+    @JoinColumn(name = "idPedidos", nullable = false)
     private Pedido pedido;
 
     @ManyToOne
-    @JoinColumn(name = "idProductos")
+    @JoinColumn(name = "idProductos", nullable = false)
     private Producto producto;
 
-    @Column(name = "cantidad")
+    @ManyToOne
+    @JoinColumn(name = "idTalla")
+    private TallaProducto talla;
+
+    @Column(name = "Cantidad")
     private Integer cantidad;
 }
