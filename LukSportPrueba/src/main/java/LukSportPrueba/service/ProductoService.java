@@ -51,7 +51,6 @@ public class ProductoService {
             return List.of();
         }
     }
-    
 
     public List<Producto> getProductosPorCategoria(Integer categoriaId) {
         try {
@@ -213,6 +212,39 @@ public class ProductoService {
             System.out.println("Error al obtener producto por id: " + ex.getMessage());
             ex.printStackTrace();
             return null;
+        }
+    }
+
+    public List<CantidadProductoTalla> obtenerTallasDisponibles(Integer idProducto) {
+        try {
+            return cantidadProductoTallaRepository
+                    .findByProducto_IdProductoAndExistenciaGreaterThan(idProducto, 0);
+        } catch (Exception ex) {
+            System.out.println("Error al obtener tallas disponibles: " + ex.getMessage());
+            ex.printStackTrace();
+            return List.of();
+        }
+    }
+
+    public TallaProducto obtenerTallaSinTallas() {
+        try {
+            return tallaProductoRepository
+                    .findByNombreTalla("Este producto no tiene tallas")
+                    .orElse(null);
+        } catch (Exception ex) {
+            System.out.println("Error al obtener la talla especial: " + ex.getMessage());
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<CantidadProductoTalla> obtenerInventarioPorTalla(Integer idProducto) {
+        try {
+            return cantidadProductoTallaRepository.findByProducto_IdProducto(idProducto);
+        } catch (Exception ex) {
+            System.out.println("Error al obtener inventario por talla: " + ex.getMessage());
+            ex.printStackTrace();
+            return List.of();
         }
     }
 

@@ -1,64 +1,229 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Productos | Luk Sport Center</title>
+    <head>
+        <meta charset="UTF-8">
+        <title>Productos | Luk Sport Center</title>
 
-    <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
-</head>
+        <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/estilos.css}">
 
-<body>
+        <style>
+            .productos-header {
+                background: rgba(255,255,255,0.96);
+                border-radius: 22px;
+                padding: 35px 25px;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+                margin-bottom: 35px;
+                text-align: center;
+            }
 
-<div th:replace="~{general/fragmentosGeneral :: header}"></div>
+            .productos-header h2 {
+                color: #8b0000;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
 
-<main class="main-content">
+            .productos-header p {
+                margin: 0;
+                color: #555;
+                font-size: 16px;
+            }
 
-    <div class="container py-5">
+            .producto-card {
+                background: rgba(255,255,255,0.98);
+                border: none;
+                border-radius: 20px;
+                overflow: hidden;
+                box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                height: 100%;
+            }
 
-        <h2 class="text-center mb-5">
-            <i class="fa-solid fa-bag-shopping me-2"></i>
-            Productos
-        </h2>
+            .producto-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 12px 26px rgba(0,0,0,0.18);
+            }
 
-        <div class="row g-4">
+            .producto-img {
+                width: 100%;
+                height: 250px;
+                object-fit: cover;
+            }
 
-            <div class="col-md-4" th:each="producto : ${productos}">
+            .producto-body {
+                padding: 22px;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
 
-                <div class="card shadow-lg h-100">
+            .producto-nombre {
+                color: #8b0000;
+                font-size: 1.25rem;
+                font-weight: 700;
+                margin-bottom: 10px;
+                min-height: 48px;
+            }
 
-                    <img th:src="${producto.imagen != null ? producto.imagen : '/img/logo.png'}"
-                         class="card-img-top"
-                         style="height: 220px; object-fit: cover;">
+            .producto-descripcion {
+                color: #666;
+                font-size: 0.95rem;
+                line-height: 1.6;
+                min-height: 72px;
+                margin-bottom: 14px;
+            }
 
-                    <div class="card-body text-center">
+            .producto-precio {
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: #111;
+                margin-bottom: 12px;
+            }
 
-                        <h5 th:text="${producto.nombre}"></h5>
+            .producto-meta {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                flex-wrap: wrap;
+                margin-bottom: 18px;
+            }
 
-                        <!-- 🔥 ELIMINAMOS precio -->
-                        <p class="text-muted">Disponible</p>
+            .producto-badge {
+                border-radius: 999px;
+                padding: 8px 14px;
+                font-size: 0.85rem;
+                font-weight: 600;
+            }
 
-                        <button class="btn btn-danger w-100">
-                            <i class="fa-solid fa-cart-plus me-1"></i>
-                            Agregar al carrito
-                        </button>
+            .badge-disponible {
+                background-color: #d1f7dc;
+                color: #13653a;
+            }
 
+            .badge-agotado {
+                background-color: #ffd6d6;
+                color: #9b1111;
+            }
+
+            .badge-tallas {
+                background-color: #e9ecef;
+                color: #444;
+            }
+
+            .producto-btn {
+                margin-top: auto;
+                border-radius: 12px;
+                padding: 11px 16px;
+                font-weight: 600;
+            }
+
+            .sin-productos-box {
+                background: rgba(255,255,255,0.96);
+                border-radius: 18px;
+                padding: 30px 20px;
+                box-shadow: 0 8px 20px rgba(0,0,0,0.10);
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div th:replace="~{general/fragmentosGeneral :: header}"></div>
+
+        <main class="main-content">
+            <div class="container py-5">
+
+                <!-- ENCABEZADO -->
+                <div class="productos-header">
+                    <h2>
+                        <i class="fa-solid fa-bag-shopping me-2"></i>
+                        Productos Disponibles
+                    </h2>
+                    <p>
+                        Descubre artículos deportivos de calidad para acompañarte en cada entrenamiento y competencia.
+                    </p>
+                </div>
+
+                <!-- LISTADO -->
+                <div class="row g-4" th:if="${!#lists.isEmpty(productos)}">
+
+                    <div class="col-md-6 col-lg-4" th:each="producto : ${productos}">
+                        <div class="producto-card">
+
+                            <img th:src="${producto.imagen != null ? producto.imagen : '/img/logo.png'}"
+                                 class="producto-img"
+                                 alt="Imagen producto">
+
+                            <div class="producto-body">
+
+                                <h5 class="producto-nombre" th:text="${producto.nombre}">
+                                    Nombre del producto
+                                </h5>
+
+                                <p class="producto-descripcion"
+                                   th:text="${producto.descripcion != null and !#strings.isEmpty(producto.descripcion) ? producto.descripcion : 'Producto deportivo disponible en nuestro catálogo.'}">
+                                    Descripción del producto
+                                </p>
+
+                                <div class="producto-precio">
+                                    ₡<span th:text="${#numbers.formatDecimal(producto.precioUnitario, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                                </div>
+
+                                <div class="producto-meta">
+                                    <span th:if="${producto.cantidadExistencia > 0}" class="producto-badge badge-disponible">
+                                        <i class="fa-solid fa-circle-check me-1"></i>Disponible
+                                    </span>
+
+                                    <span th:if="${producto.cantidadExistencia == 0}" class="producto-badge badge-agotado">
+                                        <i class="fa-solid fa-circle-xmark me-1"></i>Agotado
+                                    </span>
+
+                                    <span th:if="${producto.tieneTalla}" class="producto-badge badge-tallas">
+                                        <i class="fa-solid fa-ruler-horizontal me-1"></i>Con tallas
+                                    </span>
+
+                                    <span th:if="${!producto.tieneTalla}" class="producto-badge badge-tallas">
+                                        <i class="fa-solid fa-box me-1"></i>Sin tallas
+                                    </span>
+                                </div>
+
+                                <a th:href="@{/producto/detalle/{id}(id=${producto.idProducto})}"
+                                   class="btn btn-danger w-100">
+                                    <i class="fa-solid fa-eye me-1"></i>
+                                    Ver producto
+                                </a>
+
+                                <button th:if="${producto.cantidadExistencia == 0}"
+                                        class="btn btn-secondary producto-btn w-100"
+                                        disabled>
+                                    Sin existencias
+                                </button>
+
+                            </div>
+                        </div>
                     </div>
 
                 </div>
 
+                <!-- MENSAJE VACÍO -->
+                <div th:if="${#lists.isEmpty(productos)}" class="sin-productos-box">
+                    <h4 class="mb-3 text-danger">
+                        <i class="fa-solid fa-box-open me-2"></i>
+                        No hay productos disponibles
+                    </h4>
+                    <p class="text-muted mb-0">
+                        En este momento no hay productos activos en esta categoría.
+                    </p>
+                </div>
+
             </div>
+        </main>
 
-        </div>
+        <div th:replace="~{general/fragmentosGeneral :: footer}"></div>
 
-    </div>
+        <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
 
-</main>
-
-<div th:replace="~{general/fragmentosGeneral :: footer}"></div>
-
-<script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
-
-</body>
+    </body>
 </html>

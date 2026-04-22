@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/vendedor")
@@ -61,6 +62,7 @@ public class VendedorController {
     public String gestionarInventario(HttpSession session,
             @PathVariable("idProducto") Integer idProducto,
             Model model) {
+
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esVendedor(usuarioSesion)) {
@@ -71,7 +73,9 @@ public class VendedorController {
 
         model.addAttribute("producto", producto);
         model.addAttribute("tallas", tallaProductoRepository.findAll());
+        model.addAttribute("inventarioTallas", productoService.obtenerInventarioPorTalla(idProducto));
         model.addAttribute("seccion", "inventarioProducto");
+
         return "vendedor/dashboard";
     }
 
@@ -80,7 +84,7 @@ public class VendedorController {
             @RequestParam("idProducto") Integer idProducto,
             @RequestParam("idTalla") Integer idTalla,
             @RequestParam("cantidad") Integer cantidad,
-            Model model) {
+            RedirectAttributes redirectAttributes) {
 
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
@@ -90,17 +94,13 @@ public class VendedorController {
 
         String resultado = productoService.agregarExistenciaProductoTalla(idProducto, idTalla, cantidad);
 
-        model.addAttribute("producto", productoService.obtenerProductoPorId(idProducto));
-        model.addAttribute("tallas", tallaProductoRepository.findAll());
-        model.addAttribute("seccion", "inventarioProducto");
-
         if (!"ok".equals(resultado)) {
-            model.addAttribute("errorInventario", resultado);
+            redirectAttributes.addFlashAttribute("errorInventario", resultado);
         } else {
-            model.addAttribute("mensajeExito", "Existencia agregada correctamente");
+            redirectAttributes.addFlashAttribute("mensajeExito", "La transacción se realizó con éxito.");
         }
 
-        return "vendedor/dashboard";
+        return "redirect:/vendedor/productos";
     }
 
     @PostMapping("/productos/quitarExistencia")
@@ -108,7 +108,7 @@ public class VendedorController {
             @RequestParam("idProducto") Integer idProducto,
             @RequestParam("idTalla") Integer idTalla,
             @RequestParam("cantidad") Integer cantidad,
-            Model model) {
+            RedirectAttributes redirectAttributes) {
 
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
@@ -118,16 +118,12 @@ public class VendedorController {
 
         String resultado = productoService.quitarExistenciaProductoTalla(idProducto, idTalla, cantidad);
 
-        model.addAttribute("producto", productoService.obtenerProductoPorId(idProducto));
-        model.addAttribute("tallas", tallaProductoRepository.findAll());
-        model.addAttribute("seccion", "inventarioProducto");
-
         if (!"ok".equals(resultado)) {
-            model.addAttribute("errorInventario", resultado);
+            redirectAttributes.addFlashAttribute("errorInventario", resultado);
         } else {
-            model.addAttribute("mensajeExito", "Existencia descontada correctamente");
+            redirectAttributes.addFlashAttribute("mensajeExito", "La transacción se realizó con éxito.");
         }
 
-        return "vendedor/dashboard";
+        return "redirect:/vendedor/productos";
     }
 }
