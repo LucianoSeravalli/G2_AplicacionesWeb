@@ -12,12 +12,17 @@ import LukSportPrueba.repository.TallaProductoRepository;
 import LukSportPrueba.repository.PedidoRepository;
 import LukSportPrueba.repository.PedidoProductoRepository;
 import LukSportPrueba.repository.ProductoRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CarritoService {
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @Autowired
     private CantidadProductoTallaRepository cantidadProductoTallaRepository;
@@ -33,6 +38,9 @@ public class CarritoService {
 
     @Autowired
     private ProductoRepository productoRepository;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     public String agregarProductoAlCarrito(Integer idUsuario, Integer idProducto, Integer idTalla, Integer cantidad, String tipoEntrega) {
         try {
@@ -214,7 +222,8 @@ public class CarritoService {
         }
     }
 
-    public String pagarPedido(Integer idUsuario) {
+    @Transactional
+    public String pagarPedido(Integer idUsuario, Usuario usuarioSesion) {
         try {
             Pedido carrito = pedidoRepository
                     .findByUsuario_IdUsuarioAndEstado(idUsuario, "carrito")
@@ -230,7 +239,7 @@ public class CarritoService {
                 return "No puedes pagar un carrito vacío.";
             }
 
-            // 1. Validar primero que todo tenga stock suficiente
+            // 1. Validar que todos los productos tengan stock suficiente
             for (PedidoProducto item : items) {
                 CantidadProductoTalla existencia = cantidadProductoTallaRepository
                         .findByProducto_IdProductoAndTalla_IdTalla(
@@ -251,7 +260,7 @@ public class CarritoService {
                 }
             }
 
-            // 2. Restar inventario por talla
+            // 2. Descontar inventario por talla y recalcular stock general
             for (PedidoProducto item : items) {
                 CantidadProductoTalla existencia = cantidadProductoTallaRepository
                         .findByProducto_IdProductoAndTalla_IdTalla(
@@ -263,7 +272,6 @@ public class CarritoService {
                 existencia.setExistencia(existencia.getExistencia() - item.getCantidad());
                 cantidadProductoTallaRepository.save(existencia);
 
-                // 3. Recalcular cantidadExistencia total del producto
                 Producto producto = item.getProducto();
 
                 int totalProducto = cantidadProductoTallaRepository
@@ -276,9 +284,17 @@ public class CarritoService {
                 productoRepository.save(producto);
             }
 
-            // 4. Marcar pedido como realizado
+            // 3. Marcar pedido como realizado
             carrito.setEstado("realizado");
             pedidoRepository.save(carrito);
+
+            // 4. Enviar correo de factura
+            try {
+                usuarioService.enviarCorreoCompra(usuarioSesion, carrito, items);
+            } catch (Exception ex) {
+                System.out.println("No se pudo enviar el correo de compra: " + ex.getMessage());
+                ex.printStackTrace();
+            }
 
             return "ok";
 

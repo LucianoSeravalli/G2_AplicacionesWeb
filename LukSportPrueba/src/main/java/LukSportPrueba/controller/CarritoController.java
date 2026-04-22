@@ -1,5 +1,6 @@
 package LukSportPrueba.controller;
 
+import LukSportPrueba.service.UsuarioService;
 import LukSportPrueba.domain.Pedido;
 import LukSportPrueba.domain.Usuario;
 import LukSportPrueba.service.CarritoService;
@@ -16,6 +17,9 @@ public class CarritoController {
 
     @Autowired
     private CarritoService carritoService;
+    
+    @Autowired
+    private UsuarioService usuarioService;
 
     private boolean puedeUsarCarrito(Usuario usuario) {
         return usuario != null
@@ -157,6 +161,7 @@ public class CarritoController {
             return "redirect:/login";
         }
 
+        // Validar datos de tarjeta
         String validacionPago = carritoService.validarDatosPago(
                 nombreTarjeta,
                 numeroTarjeta,
@@ -170,28 +175,30 @@ public class CarritoController {
             return "redirect:/carrito/pago";
         }
 
+        // Obtener carrito actual
         Pedido carrito = carritoService.obtenerCarritoActivo(usuarioSesion.getIdUsuario());
+
         if (carrito == null) {
-            redirectAttributes.addFlashAttribute("error", "No tienes un carrito activo.");
+            redirectAttributes.addFlashAttribute("error",
+                    "No tienes un carrito activo.");
             return "redirect:/carrito";
         }
 
         Integer idPedido = carrito.getIdPedido();
 
-        String resultado = carritoService.pagarPedido(usuarioSesion.getIdUsuario());
+        // Procesar pago
+        String resultado = carritoService.pagarPedido(usuarioSesion.getIdUsuario(), usuarioSesion);
 
         if (!"ok".equals(resultado)) {
             redirectAttributes.addFlashAttribute("error", resultado);
             return "redirect:/carrito/pago";
         }
 
-        redirectAttributes.addFlashAttribute("mensaje", "El pago se procesó correctamente.");
+        redirectAttributes.addFlashAttribute("mensaje",
+                "El pago se procesó correctamente. Se envió un comprobante a tu correo.");
+
         return "redirect:/carrito/comprobante/" + idPedido;
     }
-    
-    
-    
-    
 
     @GetMapping("/historial")
     public String historial(HttpSession session, Model model) {
