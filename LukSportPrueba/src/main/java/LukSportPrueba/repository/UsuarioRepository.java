@@ -5,6 +5,7 @@
 package LukSportPrueba.repository;
 
 import LukSportPrueba.domain.Usuario;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
@@ -14,4 +15,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     public Usuario findByCorreoAndContrasenaAndActivoTrue(String correo, String contrasena);
     public Usuario findByNombre(String nombre);
     public Usuario findByCorreo(String correo);
+    public List<Usuario> findByNombreContainingIgnoreCaseOrCorreoContainingIgnoreCase(String nombre, String correo);
 }

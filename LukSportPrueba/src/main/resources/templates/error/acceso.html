@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Acceso Denegado | Luk Sport Center</title>
+
+        <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/estilos.css}">
+        <link rel="stylesheet" th:href="@{/css/error.css}">
+    </head>
+    <body>
+
+        <div th:replace="~{general/fragmentosGeneral :: header}"></div>
+
+        <main class="main-content">
+
+            <div class="container py-5">
+
+                <div class="error-box text-center">
+
+                    <div class="error-icon">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+
+                    <h1 class="error-title">
+                        Ops! No tienes acceso
+                    </h1>
+
+                    <p class="error-text">
+                        La página que intentas visitar no existe o no tienes permisos
+                        para acceder a este contenido.
+                    </p>
+
+                    <div class="error-buttons mt-4">
+
+                        <a th:href="@{/}" class="btn btn-danger btn-lg">
+                            <i class="fa-solid fa-house me-2"></i>
+                            Ir al Inicio
+                        </a>
+
+                        <a th:href="@{/categorias}" class="btn btn-outline-dark btn-lg">
+                            <i class="fa-solid fa-store me-2"></i>
+                            Ver Tienda
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <div th:replace="~{general/fragmentosGeneral :: footer}"></div>
+
+        <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
+
+    </body>
+</html>

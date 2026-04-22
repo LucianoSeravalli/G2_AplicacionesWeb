@@ -37,7 +37,7 @@ public class VendedorController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esVendedor(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         model.addAttribute("productos", productoService.listarProductos());
@@ -50,7 +50,7 @@ public class VendedorController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esVendedor(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         model.addAttribute("productos", productoService.listarProductos());
@@ -66,7 +66,7 @@ public class VendedorController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esVendedor(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         Producto producto = productoService.obtenerProductoPorId(idProducto);
@@ -89,7 +89,7 @@ public class VendedorController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esVendedor(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         String resultado = productoService.agregarExistenciaProductoTalla(idProducto, idTalla, cantidad);
@@ -113,7 +113,7 @@ public class VendedorController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esVendedor(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         String resultado = productoService.quitarExistenciaProductoTalla(idProducto, idTalla, cantidad);

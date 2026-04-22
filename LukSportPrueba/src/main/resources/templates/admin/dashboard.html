@@ -49,6 +49,11 @@
                                        th:classappend="${seccion == 'transacciones'} ? ' active' : ''">
                                         <i class="fa-solid fa-receipt me-2"></i>Transacciones
                                     </a>
+                                    <a th:href="@{/admin/usuarios}"
+                                       class="admin-menu-link"
+                                       th:classappend="${seccion == 'usuarios'} ? ' active' : ''">
+                                        <i class="fa-solid fa-users-gear me-2"></i>Usuarios
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -528,6 +533,97 @@
 
                                         </table>
 
+                                    </div>
+
+                                </div>
+
+                                <!-- USUARIOS -->
+                                <div th:if="${seccion == 'usuarios'}">
+
+                                    <div class="mb-4">
+                                        <h2 class="admin-title mb-1">Gestión de Roles de Usuarios</h2>
+                                        <p class="admin-text mb-0">
+                                            Busca usuarios por nombre o correo y actualiza su rol dentro del sistema.
+                                        </p>
+                                    </div>
+
+                                    <div th:if="${mensajeUsuarios != null}" class="alert alert-success">
+                                        <span th:text="${mensajeUsuarios}"></span>
+                                    </div>
+
+                                    <div th:if="${errorUsuarios != null}" class="alert alert-danger">
+                                        <span th:text="${errorUsuarios}"></span>
+                                    </div>
+
+                                    <!-- BUSCADOR -->
+                                    <div class="card shadow-sm border-0 mb-4">
+                                        <div class="card-body">
+                                            <form th:action="@{/admin/usuarios/buscar}" method="get">
+                                                <div class="row g-3 align-items-end">
+                                                    <div class="col-md-9">
+                                                        <label class="form-label">Buscar por nombre o correo</label>
+                                                        <input type="text"
+                                                               name="criterio"
+                                                               class="form-control"
+                                                               th:value="${criterio}"
+                                                               placeholder="Ejemplo: Ana o ana@gmail.com"
+                                                               required>
+                                                    </div>
+
+                                                    <div class="col-md-3 d-grid">
+                                                        <button type="submit" class="btn btn-danger">
+                                                            <i class="fa-solid fa-magnifying-glass me-2"></i>Buscar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <!-- RESULTADOS -->
+                                    <div th:if="${usuariosEncontrados != null and !#lists.isEmpty(usuariosEncontrados)}" class="table-responsive">
+                                        <table class="table table-bordered table-hover align-middle admin-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Nombre</th>
+                                                    <th>Correo</th>
+                                                    <th>Rol Actual</th>
+                                                    <th>Cambiar Rol</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="usuario : ${usuariosEncontrados}">
+                                                    <td th:text="${usuario.idUsuario}"></td>
+                                                    <td th:text="${usuario.nombre}"></td>
+                                                    <td th:text="${usuario.correo}"></td>
+                                                    <td th:text="${usuario.rol != null ? usuario.rol.rol : 'Sin rol'}"></td>
+                                                    <td>
+                                                        <form th:action="@{/admin/usuarios/actualizarRol}" method="post" class="d-flex gap-2 align-items-center">
+                                                            <input type="hidden" name="idUsuario" th:value="${usuario.idUsuario}">
+                                                            <input type="hidden" name="criterio" th:value="${criterio}">
+
+                                                            <select name="idRol" class="form-select form-select-sm" required>
+                                                                <option value="">Seleccione</option>
+                                                                <option th:each="rol : ${roles}"
+                                                                        th:value="${rol.idRol}"
+                                                                        th:text="${rol.rol}"
+                                                                        th:selected="${usuario.rol != null and usuario.rol.idRol == rol.idRol}">
+                                                                </option>
+                                                            </select>
+
+                                                            <button type="submit" class="btn btn-outline-primary btn-sm">
+                                                                Guardar
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div th:if="${usuariosEncontrados != null and #lists.isEmpty(usuariosEncontrados)}" class="alert alert-light border text-center">
+                                        No se encontraron usuarios con ese criterio.
                                     </div>
 
                                 </div>

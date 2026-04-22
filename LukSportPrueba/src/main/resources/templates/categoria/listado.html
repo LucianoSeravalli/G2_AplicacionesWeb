@@ -1,65 +1,120 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Categorías | Luk Sport Center</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Categorías | Luk Sport Center</title>
 
-    <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
-</head>
+        <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/estilos.css}">
+        <link rel="stylesheet" th:href="@{/css/categoria-listado.css}">
+    </head>
 
-<body>
+    <body>
 
-<div th:replace="~{general/fragmentosGeneral :: header}"></div>
+        <div th:replace="~{general/fragmentosGeneral :: header}"></div>
 
-<main class="main-content">
+        <main class="main-content">
 
-    <div class="container py-5">
+            <div class="container py-5">
 
-        <h2 class="text-center mb-5">
-            <i class="fa-solid fa-layer-group me-2"></i>
-            Nuestras Categorías
-        </h2>
+                <!-- HERO -->
+                <section class="categoria-hero mb-5">
+                    <div class="row align-items-center g-4">
+                        <div class="col-lg-7">
+                            <span class="categoria-badge">
+                                <i class="fa-solid fa-layer-group me-2"></i>
+                                Catálogo Deportivo
+                            </span>
 
-        <div class="row g-4 justify-content-center">
+                            <h1 class="categoria-title mt-3">Explora nuestras categorías</h1>
 
-            <div class="col-md-4" th:each="categoria : ${categorias}">
+                            <p class="categoria-text">
+                                En Luk Sport Center reunimos productos para diferentes disciplinas,
+                                entrenamientos y estilos de vida. Selecciona una categoría y descubre
+                                artículos diseñados para acompañarte en cada meta deportiva.
+                            </p>
+                        </div>
 
-                <div class="card shadow-lg h-100">
+                        <div class="col-lg-5 text-center">
+                            <img th:src="@{/img/deportes.jpg}"
+                                 alt="Categorías deportivas"
+                                 class="img-fluid categoria-hero-img">
+                        </div>
+                    </div>
+                </section>
 
-                    <!-- 🔥 IMAGEN SIMPLE (SIN ERRORES) -->
-                    <img th:src="${categoria.imagen != null ? categoria.imagen : '/img/logo.png'}"
-                         class="card-img-top"
-                         style="height:220px; object-fit:cover;"
-                         alt="Imagen categoría">
+                <!-- TITULO -->
+                <section class="mb-4 text-center">
+                    <h2 class="section-title">
+                        <i class="fa-solid fa-store me-2"></i>
+                        Nuestras Categorías
+                    </h2>
+                    <p class="section-text">
+                        Encuentra la categoría ideal según el deporte o el tipo de producto que buscas.
+                    </p>
+                </section>
 
-                    <div class="card-body text-center">
+                <!-- LISTADO -->
+                <section>
+                    <div class="row g-4 justify-content-center" th:if="${!#lists.isEmpty(categorias)}">
 
-                        <h5 th:text="${categoria.nombre}"></h5>
+                        <div class="col-md-6 col-lg-4" th:each="categoria : ${categorias}">
+                            <div class="categoria-card h-100">
 
-                        <p class="text-muted">Categoría deportiva</p>
+                                <img th:src="${categoria.imagen != null ? categoria.imagen : '/img/logo.png'}"
+                                     class="categoria-img"
+                                     alt="Imagen categoría">
 
-                        <a th:href="@{/producto/listado(categoriaId=${categoria.idCategoria})}"
-                           class="btn btn-danger w-100">
-                            Ver productos
-                        </a>
+                                <div class="categoria-card-body text-center">
+                                    <h5 class="categoria-card-title" th:text="${categoria.nombre}">Nombre categoría</h5>
+
+                                    <p class="categoria-card-text">
+                                        Descubre productos seleccionados para esta categoría deportiva
+                                        y encuentra lo que necesitas para entrenar mejor.
+                                    </p>
+
+                                    <a th:href="@{/producto/listado(categoriaId=${categoria.idCategoria})}"
+                                       class="btn btn-danger w-100 categoria-btn">
+                                        <i class="fa-solid fa-eye me-2"></i>Ver productos
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
-                </div>
+                    <!-- SIN CATEGORÍAS -->
+                    <div th:if="${#lists.isEmpty(categorias)}" class="categoria-empty text-center">
+                        <i class="fa-solid fa-box-open categoria-empty-icon mb-3"></i>
+                        <h4>No hay categorías disponibles</h4>
+                        <p class="mb-0">
+                            En este momento no hay categorías activas para mostrar.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- CTA -->
+                <section class="categoria-cta mt-5 text-center">
+                    <h3 class="mb-3">Todo lo que necesitas para rendir al máximo</h3>
+                    <p class="mb-4">
+                        Explora nuestras categorías y encuentra productos diseñados para acompañarte
+                        en entrenamientos, competencias y metas personales.
+                    </p>
+
+                    <a th:href="@{/productos}" class="btn btn-light btn-lg">
+                        <i class="fa-solid fa-fire me-2"></i>Ver destacados
+                    </a>
+                </section>
 
             </div>
 
-        </div>
+        </main>
 
-    </div>
+        <div th:replace="~{general/fragmentosGeneral :: footer}"></div>
 
-</main>
+        <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
 
-<div th:replace="~{general/fragmentosGeneral :: footer}"></div>
-
-<script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
-
-</body>
+    </body>
 </html>

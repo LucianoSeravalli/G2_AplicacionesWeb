@@ -4,6 +4,7 @@
  */
 package LukSportPrueba.controller;
 
+import LukSportPrueba.service.UsuarioService;
 import LukSportPrueba.domain.Producto;
 import LukSportPrueba.domain.Usuario;
 import LukSportPrueba.repository.TallaProductoRepository;
@@ -20,14 +21,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
     private ProductoService productoService;
-    
+
     @Autowired
     private CarritoService carritoService;
 
@@ -48,7 +53,7 @@ public class AdminController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esAdmin(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         model.addAttribute("seccion", "inicio");
@@ -60,7 +65,7 @@ public class AdminController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esAdmin(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         model.addAttribute("productos", productoService.listarProductos());
@@ -74,7 +79,7 @@ public class AdminController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esAdmin(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         model.addAttribute("seccion", "transacciones");
@@ -89,7 +94,7 @@ public class AdminController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esAdmin(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         model.addAttribute("productos", productoService.listarProductos());
@@ -103,7 +108,7 @@ public class AdminController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esAdmin(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         model.addAttribute("producto", new Producto());
@@ -122,7 +127,7 @@ public class AdminController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esAdmin(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
         producto.setCantidadExistencia(0);
         productoService.guardarProducto(producto, imagenFile, idCategoria);
@@ -138,7 +143,7 @@ public class AdminController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esAdmin(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         Producto producto = productoService.obtenerProductoPorId(idProducto);
@@ -175,7 +180,7 @@ public class AdminController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esAdmin(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         productoService.eliminarProducto(idProducto);
@@ -191,7 +196,7 @@ public class AdminController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esAdmin(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         Producto producto = productoService.obtenerProductoPorId(idProducto);
@@ -213,7 +218,7 @@ public class AdminController {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esAdmin(usuarioSesion)) {
-            return "redirect:/";
+            return "redirect:/sin-acceso";
         }
 
         String resultado = productoService.agregarExistenciaProductoTalla(idProducto, idTalla, cantidad);
@@ -231,4 +236,65 @@ public class AdminController {
         return "redirect:/admin/productos/listado";
     }
 
-} //ssss
+    @GetMapping("/usuarios")
+    public String adminUsuarios(HttpSession session, Model model) {
+        Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
+
+        if (!esAdmin(usuarioSesion)) {
+            return "redirect:/sin-acceso";
+        }
+
+        model.addAttribute("seccion", "usuarios");
+        model.addAttribute("roles", usuarioService.listarRoles());
+
+        return "admin/dashboard";
+    }
+
+    @GetMapping("/usuarios/buscar")
+    public String buscarUsuarios(HttpSession session,
+            @RequestParam("criterio") String criterio,
+            Model model) {
+
+        Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
+
+        if (!esAdmin(usuarioSesion)) {
+            return "redirect:/sin-acceso";
+        }
+
+        model.addAttribute("seccion", "usuarios");
+        model.addAttribute("criterio", criterio);
+        model.addAttribute("usuariosEncontrados", usuarioService.buscarUsuariosPorNombreOCorreo(criterio));
+        model.addAttribute("roles", usuarioService.listarRoles());
+
+        return "admin/dashboard";
+    }
+
+    @PostMapping("/usuarios/actualizarRol")
+    public String actualizarRolUsuario(HttpSession session,
+            @RequestParam("idUsuario") Integer idUsuario,
+            @RequestParam("idRol") Integer idRol,
+            @RequestParam(value = "criterio", required = false) String criterio,
+            RedirectAttributes redirectAttributes) {
+
+        Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
+
+        if (!esAdmin(usuarioSesion)) {
+            return "redirect:/sin-acceso";
+        }
+
+        String resultado = usuarioService.actualizarRolUsuario(idUsuario, idRol);
+
+        if (!"ok".equals(resultado)) {
+            redirectAttributes.addFlashAttribute("errorUsuarios", resultado);
+        } else {
+            redirectAttributes.addFlashAttribute("mensajeUsuarios", "Rol actualizado correctamente.");
+        }
+
+        if (criterio != null && !criterio.isBlank()) {
+            return "redirect:/admin/usuarios/buscar?criterio=" + criterio;
+        }
+
+        return "redirect:/admin/usuarios";
+    }
+
+}
