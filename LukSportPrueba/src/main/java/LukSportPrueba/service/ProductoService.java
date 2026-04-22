@@ -52,14 +52,15 @@ public class ProductoService {
         }
     }
     
+
     public List<Producto> getProductosPorCategoria(Integer categoriaId) {
-    try {
-        return productoRepository.findByCategoria_IdCategoria(categoriaId);
-    } catch (Exception ex) {
-        System.out.println("Error al obtener productos por categoría: " + ex.getMessage());
-        return List.of();
+        try {
+            return productoRepository.findByActividadAndCategoria_IdCategoria("activo", categoriaId);
+        } catch (Exception ex) {
+            System.out.println("Error al obtener productos por categoría: " + ex.getMessage());
+            return List.of();
+        }
     }
-}
 
     public Producto guardarProducto(Producto producto, MultipartFile imagenFile, Integer idCategoria) {
         try {
@@ -95,10 +96,8 @@ public class ProductoService {
         }
     }
 
-    public Producto editarProducto(Integer idProducto, String nombre, String descripcion, MultipartFile imagenFile) {
+    public Producto editarProducto(Integer idProducto, String nombre, String descripcion, String actividad, MultipartFile imagenFile) {
         try {
-
-            // 🔹 Buscar producto existente
             Producto productoExistente = productoRepository.findById(idProducto).orElse(null);
 
             if (productoExistente == null) {
@@ -106,11 +105,10 @@ public class ProductoService {
                 return null;
             }
 
-            // 🔹 Actualizar SOLO campos permitidos
             productoExistente.setNombre(nombre);
             productoExistente.setDescripcion(descripcion);
+            productoExistente.setActividad(actividad);
 
-            // 🔹 Si viene imagen nueva → subirla
             if (imagenFile != null && !imagenFile.isEmpty()) {
                 String urlImagen = fireBaseStorageService.uploadImage(
                         imagenFile, "productos", productoExistente.getIdProducto()
@@ -118,7 +116,6 @@ public class ProductoService {
                 productoExistente.setImagen(urlImagen);
             }
 
-            // 🔹 Guardar cambios
             return productoRepository.save(productoExistente);
 
         } catch (IOException ex) {

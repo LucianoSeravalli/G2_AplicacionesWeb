@@ -17,7 +17,7 @@ public class CategoriaPublicController {
     @GetMapping("")
     public String listadoCategorias(Model model) {
 
-        model.addAttribute("categorias", categoriaService.listarCategorias());
+        model.addAttribute("categorias", categoriaService.listarCategoriasActivas());
 
         return "categoria/listado";
     }

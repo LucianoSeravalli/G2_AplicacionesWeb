@@ -268,8 +268,8 @@
                                                             <option th:value="false">No</option>
                                                         </select>
                                                     </div>
-                                                    
-                                                    
+
+
                                                     <div class="col-md-4">
                                                         <label class="form-label">Imagen</label>
                                                         <input type="file" class="form-control" name="imagenFile" accept="image/*">
@@ -307,6 +307,15 @@
                                                     <div class="col-md-6">
                                                         <label class="form-label">Imagen</label>
                                                         <input type="file" class="form-control" name="imagenFile" accept="image/*">
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Actividad</label>
+                                                        <select class="form-select" name="actividad" required>
+                                                            <option value="">Seleccione una opción</option>
+                                                            <option value="activo" th:selected="${producto.actividad == 'activo'}">Activo</option>
+                                                            <option value="inactivo" th:selected="${producto.actividad == 'inactivo'}">Inactivo</option>
+                                                        </select>
                                                     </div>
 
                                                     <div class="col-12">
@@ -404,7 +413,7 @@
                                                         <strong>Stock general:</strong>
                                                         <span th:text="${producto.cantidadExistencia}">0</span>
                                                     </p>
-                                                    
+
                                                     <p class="admin-card-text mb-1">
                                                         <strong>Tiene tallas:</strong>
                                                         <span th:text="${producto.tieneTalla ? 'Sí' : 'No'}">Sí</span>
