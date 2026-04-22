@@ -23,13 +23,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    
+
     @Autowired
     private ProductoService productoService;
 
     @Autowired
     private CategoriaService categoriaService;
-    
+
     @Autowired
     private TallaProductoRepository tallaProductoRepository;
 
@@ -51,7 +51,6 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-
     @GetMapping("/productos")
     public String adminProductos(HttpSession session, Model model) {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
@@ -64,8 +63,7 @@ public class AdminController {
         model.addAttribute("seccion", "productos");
         return "admin/dashboard";
     }
-    
-    
+
     @GetMapping("/transacciones")
     public String adminTransacciones(HttpSession session, Model model) {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
@@ -77,9 +75,7 @@ public class AdminController {
         model.addAttribute("seccion", "transacciones");
         return "admin/dashboard";
     }
-    
-    
-    
+
     @GetMapping("/productos/listado")
     public String listarProductos(HttpSession session, Model model) {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
@@ -93,7 +89,7 @@ public class AdminController {
 
         return "admin/dashboard";
     }
-    
+
     @GetMapping("/productos/nuevo")
     public String nuevoProducto(HttpSession session, Model model) {
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
@@ -125,8 +121,7 @@ public class AdminController {
 
         return "redirect:/admin/productos/listado";
     }
-    
-    
+
     @GetMapping("/productos/editar/{idProducto}")
     public String editarProducto(HttpSession session,
             @PathVariable("idProducto") Integer idProducto,
@@ -145,12 +140,13 @@ public class AdminController {
 
         return "admin/dashboard";
     }
-    
+
     @PostMapping("/productos/editar/{idProducto}")
     public String actualizarProducto(HttpSession session,
             @PathVariable("idProducto") Integer idProducto,
             @RequestParam("nombre") String nombre,
             @RequestParam("descripcion") String descripcion,
+            @RequestParam("actividad") String actividad,
             @RequestParam("imagenFile") MultipartFile imagenFile) {
 
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
@@ -159,11 +155,11 @@ public class AdminController {
             return "redirect:/";
         }
 
-        productoService.editarProducto(idProducto, nombre, descripcion, imagenFile);
+        productoService.editarProducto(idProducto, nombre, descripcion, actividad, imagenFile);
 
-        return "redirect:/admin/productos/listado";
+        return "redirect:/admin/productos";
     }
-    
+
     @GetMapping("/productos/eliminar/{idProducto}")
     public String eliminarProducto(HttpSession session,
             @PathVariable("idProducto") Integer idProducto) {
@@ -198,7 +194,7 @@ public class AdminController {
 
         return "admin/dashboard";
     }
-    
+
     @PostMapping("/productos/agregarExistencia")
     public String agregarExistencia(HttpSession session,
             @RequestParam("idProducto") Integer idProducto,
@@ -226,5 +222,5 @@ public class AdminController {
 
         return "redirect:/admin/productos/listado";
     }
-    
+
 } //ssss

@@ -4,13 +4,13 @@
  */
 package LukSportPrueba.repository;
 
-
 import LukSportPrueba.domain.Producto;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
-    
-    public List<Producto> findByCategoria_IdCategoria(Integer idCategoria);
-}
 
+    public List<Producto> findByCategoria_IdCategoria(Integer idCategoria);
+
+    public List<Producto> findByActividadAndCategoria_IdCategoria(String actividad, Integer idCategoria);
+}

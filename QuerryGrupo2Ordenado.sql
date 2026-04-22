@@ -63,6 +63,7 @@ CREATE TABLE Producto (
 ) ENGINE=InnoDB;
 
 ALTER TABLE Producto
+ADD COLUMN Actividad ENUM('activo', 'inactivo') NOT NULL DEFAULT 'inactivo',
 ADD COLUMN TieneTalla boolean;
 
 -- =========================
