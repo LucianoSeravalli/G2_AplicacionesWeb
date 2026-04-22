@@ -19,8 +19,6 @@
 
 .carrito-table {
     background: white;
-    border-radius: 16px;
-    overflow: hidden;
 }
 
 .carrito-table thead th {
@@ -68,4 +66,14 @@
         width: 60px;
         height: 60px;
     }
+}
+
+.carrito-box .form-control {
+    border-radius: 12px;
+    min-height: 46px;
+}
+
+.carrito-box .btn {
+    border-radius: 12px;
+    font-weight: 600;
 }
