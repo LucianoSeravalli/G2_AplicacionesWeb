@@ -1,0 +1,181 @@
+/* HERO */
+.productos-hero {
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 24px;
+    padding: 45px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+}
+
+.hero-badge {
+    display: inline-block;
+    background: #ffe3e3;
+    color: #8b0000;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.hero-title {
+    font-size: 42px;
+    font-weight: 800;
+    color: #8b0000;
+    line-height: 1.2;
+}
+
+.hero-text {
+    color: #444;
+    font-size: 17px;
+    line-height: 1.8;
+    margin-top: 14px;
+    max-width: 560px;
+}
+
+.hero-img {
+    max-height: 420px;
+    border-radius: 24px;
+    object-fit: cover;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+}
+
+/* SECCIONES */
+.section-header {
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 34px;
+    font-weight: 800;
+    color: #8b0000;
+}
+
+.section-text {
+    font-size: 16px;
+    color: #666;
+}
+
+/* PRODUCTO DESTACADO */
+.producto-destacado-card {
+    background: rgba(255,255,255,0.96);
+    border-radius: 24px;
+    padding: 35px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.14);
+}
+
+.destacado-img {
+    max-height: 340px;
+    border-radius: 20px;
+    object-fit: cover;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.16);
+}
+
+.precio-destacado {
+    font-size: 34px;
+    font-weight: 800;
+    color: #111;
+    margin-top: 10px;
+}
+
+/* BENEFICIOS */
+.beneficio-card {
+    background: rgba(255,255,255,0.96);
+    border-radius: 22px;
+    padding: 32px 26px;
+    text-align: center;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+    transition: all 0.25s ease;
+}
+
+.beneficio-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.16);
+}
+
+.beneficio-icon {
+    font-size: 42px;
+    color: #b30000;
+    margin-bottom: 18px;
+}
+
+.beneficio-card h5 {
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 12px;
+}
+
+.beneficio-card p {
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 0;
+}
+
+/* CTA */
+.cta-box {
+    background: linear-gradient(135deg, #8b0000, #c40000);
+    color: white;
+    border-radius: 26px;
+    padding: 50px 30px;
+    box-shadow: 0 12px 26px rgba(0,0,0,0.16);
+}
+
+.cta-box h2 {
+    font-size: 38px;
+    font-weight: 800;
+}
+
+.cta-box p {
+    font-size: 18px;
+    opacity: 0.95;
+}
+
+.cta-box .btn {
+    padding: 12px 28px;
+    font-weight: 700;
+    border-radius: 14px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+    .hero-title {
+        font-size: 34px;
+    }
+
+    .section-title {
+        font-size: 30px;
+    }
+
+    .productos-hero,
+    .producto-destacado-card {
+        padding: 30px;
+    }
+
+    .cta-box h2 {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 28px;
+    }
+
+    .section-title {
+        font-size: 26px;
+    }
+
+    .hero-text,
+    .section-text,
+    .cta-box p {
+        font-size: 15px;
+    }
+
+    .productos-hero,
+    .producto-destacado-card,
+    .cta-box {
+        padding: 24px;
+    }
+
+    .precio-destacado {
+        font-size: 28px;
+    }
+}

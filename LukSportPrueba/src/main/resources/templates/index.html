@@ -5,77 +5,274 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Inicio | Luk Sport Center</title>
 
-        <!-- Bootstrap -->
         <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
-
-        <!-- Font Awesome -->
         <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
-
-        <!-- CSS propio -->
         <link rel="stylesheet" th:href="@{/css/estilos.css}">
+        <link rel="stylesheet" th:href="@{/css/index.css}">
     </head>
     <body>
         <div th:replace="~{general/fragmentosGeneral :: header}"></div>
+
         <main class="main-content">
-            <div class="container py-5"> 
-                
-                <!--Nosotros -->
-                <section class="nosotros-section py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <!-- Imagen -->
-            <div class="col-lg-6 mb-4 mb-lg-0 text-center">
-                <img th:src="@{/img/nosotros.png}" 
-                     alt="Nosotros Luk Sport Center"
-                     class="img-fluid nosotros-img">
-            </div>
-            <!-- Texto -->
-            <div class="col-lg-6">
-                <h2 class="nosotros-title mb-3">
-                    <i class="fa-solid fa-store me-2"></i>
-                    Sobre Nosotros
-                </h2>
-                <p class="nosotros-text">
-                    En <strong>Luk Sport Center</strong> nos apasiona el deporte y el bienestar.
-                    Somos una tienda especializada en artículos deportivos donde podrás encontrar
-                    una amplia variedad de productos para entrenamiento, fitness, running,
-                    ciclismo y mucho más.
-                </p>
-                <p class="nosotros-text">
-                    Nuestro objetivo es ofrecer productos de calidad que ayuden a nuestros
-                    clientes a mejorar su rendimiento y disfrutar del deporte al máximo.
-                    Trabajamos constantemente para mantener un inventario actualizado con
-                    lo mejor del mercado deportivo.
-                </p>
-                <p class="nosotros-text">
-                    Estamos ubicados en <strong>Alajuela, Costa Rica</strong>, y nuestro equipo
-                    siempre está listo para ayudarte a encontrar el equipo perfecto para
-                    tu actividad favorita.
-                </p>
-                <div class="nosotros-info mt-4">
-                    <p>
-                        <i class="fa-solid fa-location-dot me-2"></i>
-                        Alajuela, Costa Rica
-                    </p>
-                    <p>
-                        <i class="fa-solid fa-phone me-2"></i>
-                        8888-8888
-                    </p>
-                    <p>
-                        <i class="fa-solid fa-envelope me-2"></i>
-                        luksportcenter@gmail.com
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+            <div class="container py-5">
+
+                <!-- HERO -->
+                <section class="hero-index mb-5">
+                    <div class="row align-items-center g-4">
+                        <div class="col-lg-6">
+                            <div class="hero-box">
+                                <span class="hero-badge">
+                                    <i class="fa-solid fa-dumbbell me-2"></i>Tu tienda deportiva
+                                </span>
+                                <h1 class="hero-title mt-3">Equípate para rendir al máximo</h1>
+                                <p class="hero-text">
+                                    En Luk Sport Center encontrarás productos deportivos de calidad
+                                    para entrenamiento, fútbol, running, gimnasio y mucho más.
+                                </p>
+                                <div class="d-flex flex-wrap gap-2 mt-4">
+                                    <a th:href="@{/categorias}" class="btn btn-danger btn-lg">
+                                        Ver categorías
+                                    </a>
+                                    <a href="#destacados" class="btn btn-outline-dark btn-lg">
+                                        Productos destacados
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 text-center">
+                            <img th:src="@{/img/equipateConNosotros.png}"
+                                 alt="Luk Sport Center"
+                                 class="img-fluid hero-img">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SOBRE NOSOTROS -->
+                <section class="nosotros-section py-5 mb-5">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 mb-4 mb-lg-0 text-center">
+                                <img th:src="@{/img/nosotros.png}"
+                                     alt="Nosotros Luk Sport Center"
+                                     class="img-fluid nosotros-img">
+                            </div>
+
+                            <div class="col-lg-6">
+                                <h2 class="nosotros-title mb-3">
+                                    <i class="fa-solid fa-store me-2"></i>
+                                    Sobre Nosotros
+                                </h2>
+
+                                <p class="nosotros-text">
+                                    En <strong>Luk Sport Center</strong> nos apasiona el deporte y el bienestar.
+                                    Somos una tienda especializada en artículos deportivos donde podrás encontrar
+                                    una amplia variedad de productos para entrenamiento, fitness, running,
+                                    ciclismo y mucho más.
+                                </p>
+
+                                <p class="nosotros-text">
+                                    Nuestro objetivo es ofrecer productos de calidad que ayuden a nuestros
+                                    clientes a mejorar su rendimiento y disfrutar del deporte al máximo.
+                                    Trabajamos constantemente para mantener un inventario actualizado con
+                                    lo mejor del mercado deportivo.
+                                </p>
+
+                                <p class="nosotros-text">
+                                    Estamos ubicados en <strong>Alajuela, Costa Rica</strong>, y nuestro equipo
+                                    siempre está listo para ayudarte a encontrar el equipo perfecto para
+                                    tu actividad favorita.
+                                </p>
+
+                                <div class="nosotros-info mt-4">
+                                    <p>
+                                        <i class="fa-solid fa-location-dot me-2"></i>
+                                        Alajuela, Costa Rica
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-phone me-2"></i>
+                                        8888-8888
+                                    </p>
+                                    <p>
+                                        <i class="fa-solid fa-envelope me-2"></i>
+                                        luksportcenter@gmail.com
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- DESTACADOS -->
+                <section id="destacados" class="index-section mb-5">
+                    <div class="section-header text-center mb-4">
+                        <h2 class="section-title">
+                            <i class="fa-solid fa-star me-2"></i>Productos Destacados
+                        </h2>
+                        <p class="section-text">
+                            Algunos de los productos favoritos de nuestros clientes.
+                        </p>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="destacado-card h-100">
+                                <img th:src="@{/img/nosotros.png}" alt="Balón profesional" class="destacado-img">
+                                <div class="destacado-body">
+                                    <h5 class="destacado-title">Balón Profesional</h5>
+                                    <p class="destacado-text">Ideal para partidos y entrenamientos de alto nivel.</p>
+                                    <div class="destacado-price">₡18,500</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3">
+                            <div class="destacado-card h-100">
+                                <img th:src="@{/img/nosotros.png}" alt="Guantes deportivos" class="destacado-img">
+                                <div class="destacado-body">
+                                    <h5 class="destacado-title">Guantes Deportivos</h5>
+                                    <p class="destacado-text">Comodidad, agarre y protección para entrenar mejor.</p>
+                                    <div class="destacado-price">₡9,900</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3">
+                            <div class="destacado-card h-100">
+                                <img th:src="@{/img/nosotros.png}" alt="Mancuernas" class="destacado-img">
+                                <div class="destacado-body">
+                                    <h5 class="destacado-title">Mancuernas</h5>
+                                    <p class="destacado-text">Perfectas para fortalecer y complementar tu rutina.</p>
+                                    <div class="destacado-price">₡14,750</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3">
+                            <div class="destacado-card h-100">
+                                <img th:src="@{/img/nosotros.png}" alt="Camiseta deportiva" class="destacado-img">
+                                <div class="destacado-body">
+                                    <h5 class="destacado-title">Camiseta Deportiva</h5>
+                                    <p class="destacado-text">Ligera, fresca y diseñada para el máximo rendimiento.</p>
+                                    <div class="destacado-price">₡12,500</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIDEO -->
+                <section class="index-section mb-5">
+                    <div class="section-header text-center mb-4">
+                        <h2 class="section-title">
+                            <i class="fa-brands fa-youtube me-2"></i>Conócenos Mejor
+                        </h2>
+                        <p class="section-text">
+                            Mira más sobre nuestra tienda y nuestra pasión por el deporte.
+                        </p>
+                    </div>
+
+                    <div class="video-box">
+                        <div class="ratio ratio-16x9">
+                            <iframe
+                                src="https://www.youtube.com/embed/A5gcXa_h4ng?si=Hpi3Z-vmvdeVH9uQ"
+                                title="Video de Luk Sport Center"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- OPINIONES -->
+                <section class="index-section mb-5">
+                    <div class="section-header text-center mb-4">
+                        <h2 class="section-title">
+                            <i class="fa-solid fa-comments me-2"></i>Opiniones de Nuestros Clientes
+                        </h2>
+                        <p class="section-text">
+                            Lo que dicen quienes ya confiaron en Luk Sport Center.
+                        </p>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="opinion-card h-100">
+                                <div class="opinion-stars mb-3">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                                <p class="opinion-text">
+                                    “Excelente atención y productos de muy buena calidad. Encontré justo lo que necesitaba para entrenar.”
+                                </p>
+                                <h6 class="opinion-name">María G.</h6>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="opinion-card h-100">
+                                <div class="opinion-stars mb-3">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                                <p class="opinion-text">
+                                    “Muy buen inventario y el personal siempre ayuda a escoger el producto adecuado.”
+                                </p>
+                                <h6 class="opinion-name">Carlos R.</h6>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="opinion-card h-100">
+                                <div class="opinion-stars mb-3">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                                <p class="opinion-text">
+                                    “La tienda se ve muy profesional, buenos precios y variedad en artículos deportivos.”
+                                </p>
+                                <h6 class="opinion-name">Lucía P.</h6>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MAPA -->
+                <section class="index-section mb-4">
+                    <div class="section-header text-center mb-4">
+                        <h2 class="section-title">
+                            <i class="fa-solid fa-map-location-dot me-2"></i>¿Dónde Estamos?
+                        </h2>
+                        <p class="section-text">
+                            Visítanos en nuestra tienda física en Alajuela, Costa Rica.
+                        </p>
+                    </div>
+
+                    <div class="map-box">
+                        <div class="ratio ratio-16x9">
+                            <iframe
+                                src="https://www.google.com/maps?q=Alajuela,%20Costa%20Rica&output=embed"
+                                style="border:0;"
+                                allowfullscreen=""
+                                loading="lazy">
+                            </iframe>
+                        </div>
+                    </div>
+                </section>
+
             </div>
         </main>
 
         <div th:replace="~{general/fragmentosGeneral :: footer}"></div>
 
-        <!-- Bootstrap JS -->
         <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

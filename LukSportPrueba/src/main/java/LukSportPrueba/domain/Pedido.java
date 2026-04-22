@@ -5,11 +5,12 @@
 package LukSportPrueba.domain;
 
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "pedidos")
+@Table(name = "Pedidos")
 public class Pedido {
 
     @Id
@@ -18,9 +19,18 @@ public class Pedido {
     private Integer idPedido;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;
 
-    @Column(name = "total")
+    @Column(name = "Total")
     private Double total;
+
+    @Column(name = "Estado")
+    private String estado;
+
+    @Column(name = "TipoEntrega")
+    private String tipoEntrega;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PedidoProducto> productos;
 }

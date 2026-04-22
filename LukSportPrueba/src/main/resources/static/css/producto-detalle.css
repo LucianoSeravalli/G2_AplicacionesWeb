@@ -54,3 +54,9 @@
     padding: 18px;
     border-left: 5px solid #b30000;
 }
+
+.detalle-box .btn {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 12px;
+}
