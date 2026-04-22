@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Productos | Luk Sport Center</title>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+
+<div th:replace="~{general/fragmentosGeneral :: header}"></div>
+
+<main class="main-content">
+
+    <div class="container py-5">
+
+        <h2 class="text-center mb-5">
+            <i class="fa-solid fa-bag-shopping me-2"></i>
+            Productos
+        </h2>
+
+        <div class="row g-4">
+
+            <div class="col-md-4" th:each="producto : ${productos}">
+
+                <div class="card shadow-lg h-100">
+
+                    <img th:src="${producto.imagen != null ? producto.imagen : '/img/logo.png'}"
+                         class="card-img-top"
+                         style="height: 220px; object-fit: cover;">
+
+                    <div class="card-body text-center">
+
+                        <h5 th:text="${producto.nombre}"></h5>
+
+                        <!-- 🔥 ELIMINAMOS precio -->
+                        <p class="text-muted">Disponible</p>
+
+                        <button class="btn btn-danger w-100">
+                            <i class="fa-solid fa-cart-plus me-1"></i>
+                            Agregar al carrito
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<div th:replace="~{general/fragmentosGeneral :: footer}"></div>
+
+<script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

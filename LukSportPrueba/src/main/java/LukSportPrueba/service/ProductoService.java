@@ -51,6 +51,15 @@ public class ProductoService {
             return List.of();
         }
     }
+    
+    public List<Producto> getProductosPorCategoria(Integer categoriaId) {
+    try {
+        return productoRepository.findByCategoria_IdCategoria(categoriaId);
+    } catch (Exception ex) {
+        System.out.println("Error al obtener productos por categoría: " + ex.getMessage());
+        return List.of();
+    }
+}
 
     public Producto guardarProducto(Producto producto, MultipartFile imagenFile, Integer idCategoria) {
         try {

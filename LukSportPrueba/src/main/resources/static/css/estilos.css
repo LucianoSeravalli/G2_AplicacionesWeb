@@ -517,3 +517,91 @@ body {
         font-size: 24px;
     }
 }
+
+/* ===== FONDO GENERAL ===== */
+.main-content {
+    background: url('/img/fondo.png') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+/* ===== TITULOS ===== */
+.categorias-title,
+.main-content h2 {
+    color: #ff2e2e;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ===== CARDS GENERALES ===== */
+.card {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+}
+
+/* ===== EFECTO HOVER ===== */
+.card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+}
+
+/* ===== IMAGENES ===== */
+.card-img-top {
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+/* ZOOM imagen */
+.card:hover .card-img-top {
+    transform: scale(1.1);
+}
+
+/* ===== CONTENIDO ===== */
+.card-body {
+    padding: 20px;
+}
+
+/* TITULO */
+.card-title {
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+/* TEXTO */
+.text-muted {
+    font-size: 0.95rem;
+    color: #666;
+}
+
+/* ===== BOTONES ===== */
+.btn-danger {
+    background: linear-gradient(45deg, #ff2e2e, #b30000);
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+/* hover botón */
+.btn-danger:hover {
+    background: linear-gradient(45deg, #b30000, #ff2e2e);
+    transform: scale(1.05);
+}
+
+/* ===== GRID ===== */
+.row.g-4 {
+    justify-content: center;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .card-img-top {
+        height: 180px;
+    }
+}
