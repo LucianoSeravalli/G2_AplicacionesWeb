@@ -15,6 +15,14 @@ public interface PedidoProductoRepository extends JpaRepository<PedidoProducto, 
 
     @Query("SELECT pp FROM PedidoProducto pp WHERE pp.pedido.idPedido = :idPedido AND pp.producto.idProducto = :idProducto AND pp.talla.idTalla = :idTalla")
     Optional<PedidoProducto> buscarPorPedidoProductoYTalla(@Param("idPedido") Integer idPedido,
-                                                           @Param("idProducto") Integer idProducto,
-                                                           @Param("idTalla") Integer idTalla);
+            @Param("idProducto") Integer idProducto,
+            @Param("idTalla") Integer idTalla);
+
+    Optional<PedidoProducto> findByPedido_IdPedidoAndProducto_IdProductoAndTalla_IdTalla(
+            Integer idPedido, Integer idProducto, Integer idTalla
+    );
+
+    Optional<PedidoProducto> findByIdPedidosXProductoAndPedido_Usuario_IdUsuario(Integer idPedidosXProducto, Integer idUsuario);
+
+    List<PedidoProducto> findByPedido_Usuario_IdUsuarioAndPedido_Estado(Integer idUsuario, String estado);
 }

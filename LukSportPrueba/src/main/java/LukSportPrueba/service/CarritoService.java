@@ -95,8 +95,9 @@ public class CarritoService {
                 carrito.setTipoEntrega(tipoEntrega);
                 carrito = pedidoRepository.save(carrito);
             } else {
-                carrito.setTipoEntrega(tipoEntrega);
-                carrito = pedidoRepository.save(carrito);
+                if (carrito.getTipoEntrega() != null && !carrito.getTipoEntrega().equalsIgnoreCase(tipoEntrega)) {
+                    return "No puedes mezclar tipos de entrega en el mismo carrito. Finaliza o cancela tu pedido actual antes de cambiar el tipo de entrega.";
+                }
             }
 
             PedidoProducto item = pedidoProductoRepository
@@ -229,6 +230,53 @@ public class CarritoService {
                 return "No puedes pagar un carrito vacío.";
             }
 
+            // 1. Validar primero que todo tenga stock suficiente
+            for (PedidoProducto item : items) {
+                CantidadProductoTalla existencia = cantidadProductoTallaRepository
+                        .findByProducto_IdProductoAndTalla_IdTalla(
+                                item.getProducto().getIdProducto(),
+                                item.getTalla().getIdTalla()
+                        )
+                        .orElse(null);
+
+                if (existencia == null) {
+                    return "No existe inventario para el producto " + item.getProducto().getNombre()
+                            + " en la talla seleccionada.";
+                }
+
+                if (item.getCantidad() > existencia.getExistencia()) {
+                    return "No hay suficiente inventario para el producto "
+                            + item.getProducto().getNombre()
+                            + " talla " + item.getTalla().getNombreTalla() + ".";
+                }
+            }
+
+            // 2. Restar inventario por talla
+            for (PedidoProducto item : items) {
+                CantidadProductoTalla existencia = cantidadProductoTallaRepository
+                        .findByProducto_IdProductoAndTalla_IdTalla(
+                                item.getProducto().getIdProducto(),
+                                item.getTalla().getIdTalla()
+                        )
+                        .orElse(null);
+
+                existencia.setExistencia(existencia.getExistencia() - item.getCantidad());
+                cantidadProductoTallaRepository.save(existencia);
+
+                // 3. Recalcular cantidadExistencia total del producto
+                Producto producto = item.getProducto();
+
+                int totalProducto = cantidadProductoTallaRepository
+                        .findByProducto_IdProducto(producto.getIdProducto())
+                        .stream()
+                        .mapToInt(CantidadProductoTalla::getExistencia)
+                        .sum();
+
+                producto.setCantidadExistencia(totalProducto);
+                productoRepository.save(producto);
+            }
+
+            // 4. Marcar pedido como realizado
             carrito.setEstado("realizado");
             pedidoRepository.save(carrito);
 
@@ -240,4 +288,163 @@ public class CarritoService {
             return "Ocurrió un error al procesar el pago del pedido.";
         }
     }
+
+    public String eliminarItemCarrito(Integer idUsuario, Integer idItem) {
+        try {
+            Pedido carrito = obtenerCarritoActivo(idUsuario);
+            if (carrito == null) {
+                return "No tienes un carrito activo.";
+            }
+
+            PedidoProducto item = pedidoProductoRepository.findById(idItem).orElse(null);
+            if (item == null) {
+                return "El producto del carrito no existe.";
+            }
+
+            if (!item.getPedido().getIdPedido().equals(carrito.getIdPedido())) {
+                return "Ese producto no pertenece a tu carrito.";
+            }
+
+            pedidoProductoRepository.delete(item);
+            recalcularTotal(carrito.getIdPedido());
+
+            return "ok";
+
+        } catch (Exception ex) {
+            System.out.println("Error al eliminar item del carrito: " + ex.getMessage());
+            ex.printStackTrace();
+            return "Ocurrió un error al eliminar el producto del carrito.";
+        }
+    }
+
+    public String actualizarCantidadItem(Integer idUsuario, Integer idItem, Integer nuevaCantidad) {
+        try {
+            if (nuevaCantidad == null || nuevaCantidad <= 0) {
+                return "La cantidad debe ser mayor a 0.";
+            }
+
+            Pedido carrito = obtenerCarritoActivo(idUsuario);
+            if (carrito == null) {
+                return "No tienes un carrito activo.";
+            }
+
+            PedidoProducto item = pedidoProductoRepository.findById(idItem).orElse(null);
+            if (item == null) {
+                return "El item del carrito no existe.";
+            }
+
+            if (!item.getPedido().getIdPedido().equals(carrito.getIdPedido())) {
+                return "Ese item no pertenece a tu carrito.";
+            }
+
+            CantidadProductoTalla existencia = cantidadProductoTallaRepository
+                    .findByProducto_IdProductoAndTalla_IdTalla(
+                            item.getProducto().getIdProducto(),
+                            item.getTalla().getIdTalla()
+                    )
+                    .orElse(null);
+
+            if (existencia == null) {
+                return "No existe inventario para la talla seleccionada.";
+            }
+
+            if (nuevaCantidad > existencia.getExistencia()) {
+                return "La cantidad solicitada supera el inventario disponible.";
+            }
+
+            item.setCantidad(nuevaCantidad);
+            pedidoProductoRepository.save(item);
+
+            recalcularTotal(carrito.getIdPedido());
+
+            return "ok";
+
+        } catch (Exception ex) {
+            System.out.println("Error al actualizar cantidad del carrito: " + ex.getMessage());
+            ex.printStackTrace();
+            return "Ocurrió un error al actualizar la cantidad.";
+        }
+    }
+
+    public List<Pedido> obtenerHistorialPedidos(Integer idUsuario) {
+        try {
+            return pedidoRepository.findByUsuario_IdUsuarioAndEstadoOrderByIdPedidoDesc(idUsuario, "realizado");
+        } catch (Exception ex) {
+            System.out.println("Error al obtener historial: " + ex.getMessage());
+            ex.printStackTrace();
+            return List.of();
+        }
+    }
+
+    public Pedido obtenerPedidoUsuario(Integer idUsuario, Integer idPedido) {
+        try {
+            return pedidoRepository.findByIdPedidoAndUsuario_IdUsuario(idPedido, idUsuario).orElse(null);
+        } catch (Exception ex) {
+            System.out.println("Error al obtener pedido del usuario: " + ex.getMessage());
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<PedidoProducto> obtenerItemsPedido(Integer idPedido) {
+        try {
+            return pedidoProductoRepository.findByPedido_IdPedido(idPedido);
+        } catch (Exception ex) {
+            System.out.println("Error al obtener items del pedido: " + ex.getMessage());
+            ex.printStackTrace();
+            return List.of();
+        }
+    }
+
+    public String validarDatosPago(String nombreTarjeta,
+            String numeroTarjeta,
+            String mesExpiracion,
+            String anioExpiracion,
+            String cvv) {
+        try {
+            if (nombreTarjeta == null || nombreTarjeta.isBlank()
+                    || numeroTarjeta == null || numeroTarjeta.isBlank()
+                    || mesExpiracion == null || mesExpiracion.isBlank()
+                    || anioExpiracion == null || anioExpiracion.isBlank()
+                    || cvv == null || cvv.isBlank()) {
+                return "Debes completar todos los campos del formulario de pago.";
+            }
+
+            String numeroLimpio = numeroTarjeta.replace(" ", "").trim();
+
+            if (!numeroLimpio.matches("\\d{16}")) {
+                return "El número de tarjeta debe tener exactamente 16 dígitos.";
+            }
+
+            if (!mesExpiracion.matches("\\d{2}")) {
+                return "El mes de expiración debe tener formato de dos dígitos.";
+            }
+
+            int mes = Integer.parseInt(mesExpiracion);
+            if (mes < 1 || mes > 12) {
+                return "El mes de expiración no es válido.";
+            }
+
+            if (!anioExpiracion.matches("\\d{4}")) {
+                return "El año de expiración debe tener 4 dígitos.";
+            }
+
+            int anio = Integer.parseInt(anioExpiracion);
+            if (anio < 2025) {
+                return "El año de expiración no es válido.";
+            }
+
+            if (!cvv.matches("\\d{3,4}")) {
+                return "El CVV debe tener 3 o 4 dígitos.";
+            }
+
+            return "ok";
+
+        } catch (Exception ex) {
+            System.out.println("Error al validar datos de pago: " + ex.getMessage());
+            ex.printStackTrace();
+            return "Ocurrió un error al validar los datos de pago.";
+        }
+    }
+
 }
