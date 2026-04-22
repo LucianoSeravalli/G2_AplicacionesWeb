@@ -9,6 +9,7 @@ import LukSportPrueba.domain.Usuario;
 import LukSportPrueba.repository.TallaProductoRepository;
 import LukSportPrueba.service.CategoriaService;
 import LukSportPrueba.service.ProductoService;
+import LukSportPrueba.service.CarritoService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,9 @@ public class AdminController {
 
     @Autowired
     private ProductoService productoService;
+    
+    @Autowired
+    private CarritoService carritoService;
 
     @Autowired
     private CategoriaService categoriaService;
@@ -66,6 +70,7 @@ public class AdminController {
 
     @GetMapping("/transacciones")
     public String adminTransacciones(HttpSession session, Model model) {
+
         Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioSesion");
 
         if (!esAdmin(usuarioSesion)) {
@@ -73,6 +78,9 @@ public class AdminController {
         }
 
         model.addAttribute("seccion", "transacciones");
+        model.addAttribute("transacciones",
+                carritoService.obtenerTodasLasTransacciones());
+
         return "admin/dashboard";
     }
 

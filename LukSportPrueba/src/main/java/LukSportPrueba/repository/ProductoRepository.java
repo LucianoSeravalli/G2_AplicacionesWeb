@@ -13,4 +13,8 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     public List<Producto> findByCategoria_IdCategoria(Integer idCategoria);
 
     public List<Producto> findByActividadAndCategoria_IdCategoria(String actividad, Integer idCategoria);
+    
+    public List<Producto> findTop4ByActividadOrderByVecesCompradoDesc(String actividad);
+    
+    public Producto findTop1ByActividadOrderByVecesCompradoDesc(String actividad);
 }

@@ -102,63 +102,62 @@
                         </div>
                     </div>
                 </section>
-
-                <!-- DESTACADOS -->
+                
+                <!--DESTACADOS-->
                 <section id="destacados" class="index-section mb-5">
+
                     <div class="section-header text-center mb-4">
                         <h2 class="section-title">
-                            <i class="fa-solid fa-star me-2"></i>Productos Destacados
+                            <i class="fa-solid fa-star me-2"></i>
+                            Productos Destacados
                         </h2>
+
                         <p class="section-text">
-                            Algunos de los productos favoritos de nuestros clientes.
+                            Los productos más comprados por nuestros clientes.
                         </p>
                     </div>
 
                     <div class="row g-4">
-                        <div class="col-md-6 col-lg-3">
+
+                        <div class="col-md-6 col-lg-3"
+                             th:each="producto : ${destacados}">
+
                             <div class="destacado-card h-100">
-                                <img th:src="@{/img/nosotros.png}" alt="Balón profesional" class="destacado-img">
+
+                                <img th:src="${producto.imagen != null ? producto.imagen : '/img/logo.png'}"
+                                     class="destacado-img"
+                                     alt="Producto">
+
                                 <div class="destacado-body">
-                                    <h5 class="destacado-title">Balón Profesional</h5>
-                                    <p class="destacado-text">Ideal para partidos y entrenamientos de alto nivel.</p>
-                                    <div class="destacado-price">₡18,500</div>
+
+                                    <h5 class="destacado-title"
+                                        th:text="${producto.nombre}">
+                                    </h5>
+
+                                    <p class="destacado-text"
+                                       th:text="${producto.descripcion}">
+                                    </p>
+
+                                    <div class="destacado-price">
+                                        ₡<span th:text="${#numbers.formatDecimal(
+                                               producto.precioUnitario,1,'COMMA',2,'POINT')}">
+                                        </span>
+                                    </div>
+
+                                    <a th:href="@{/producto/detalle/{id}(id=${producto.idProducto})}"
+                                       class="btn btn-danger w-100 mt-3">
+
+                                        Ver Producto
+                                    </a>
+
                                 </div>
+
                             </div>
+
                         </div>
 
-                        <div class="col-md-6 col-lg-3">
-                            <div class="destacado-card h-100">
-                                <img th:src="@{/img/nosotros.png}" alt="Guantes deportivos" class="destacado-img">
-                                <div class="destacado-body">
-                                    <h5 class="destacado-title">Guantes Deportivos</h5>
-                                    <p class="destacado-text">Comodidad, agarre y protección para entrenar mejor.</p>
-                                    <div class="destacado-price">₡9,900</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-lg-3">
-                            <div class="destacado-card h-100">
-                                <img th:src="@{/img/nosotros.png}" alt="Mancuernas" class="destacado-img">
-                                <div class="destacado-body">
-                                    <h5 class="destacado-title">Mancuernas</h5>
-                                    <p class="destacado-text">Perfectas para fortalecer y complementar tu rutina.</p>
-                                    <div class="destacado-price">₡14,750</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-lg-3">
-                            <div class="destacado-card h-100">
-                                <img th:src="@{/img/nosotros.png}" alt="Camiseta deportiva" class="destacado-img">
-                                <div class="destacado-body">
-                                    <h5 class="destacado-title">Camiseta Deportiva</h5>
-                                    <p class="destacado-text">Ligera, fresca y diseñada para el máximo rendimiento.</p>
-                                    <div class="destacado-price">₡12,500</div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
+
                 </section>
 
                 <!-- VIDEO -->

@@ -1,187 +1,198 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos | Luk Sport Center</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Productos | Luk Sport Center</title>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="/webjars/font-awesome/7.0.0/css/all.min.css">
 
-    <!-- CSS General -->
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+        <!-- CSS General -->
+        <link rel="stylesheet" th:href="@{/css/estilos.css}">
 
-    <!-- CSS Productos -->
-    <link rel="stylesheet" th:href="@{/css/productos.css}">
-</head>
+        <!-- CSS Productos -->
+        <link rel="stylesheet" th:href="@{/css/productos.css}">
+    </head>
 
-<body>
+    <body>
 
-<div th:replace="~{general/fragmentosGeneral :: header}"></div>
+        <div th:replace="~{general/fragmentosGeneral :: header}"></div>
 
-<main class="main-content">
+        <main class="main-content">
 
-    <div class="container py-5">
+            <div class="container py-5">
 
-        <!-- HERO -->
-        <section class="productos-hero mb-5">
-            <div class="row align-items-center g-4">
+                <!-- HERO -->
+                <section class="productos-hero mb-5">
+                    <div class="row align-items-center g-4">
 
-                <div class="col-lg-6">
-                    <span class="hero-badge">
-                        <i class="fa-solid fa-fire me-2"></i>
-                        Lo mejor del deporte
-                    </span>
+                        <div class="col-lg-6">
+                            <span class="hero-badge">
+                                <i class="fa-solid fa-fire me-2"></i>
+                                Lo mejor del deporte
+                            </span>
 
-                    <h1 class="hero-title mt-3">
-                        Encuentra el producto ideal para tu rendimiento
-                    </h1>
+                            <h1 class="hero-title mt-3">
+                                Encuentra el producto ideal para tu rendimiento
+                            </h1>
 
-                    <p class="hero-text">
-                        Explora nuestro catálogo de artículos deportivos:
-                        ropa, accesorios, entrenamiento, fútbol, running,
-                        gimnasio y mucho más.
-                    </p>
+                            <p class="hero-text">
+                                Explora nuestro catálogo de artículos deportivos:
+                                ropa, accesorios, entrenamiento, fútbol, running,
+                                gimnasio y mucho más.
+                            </p>
 
-                    <a th:href="@{/categorias}" class="btn btn-danger btn-lg mt-3">
-                        Ver Categorías
-                    </a>
-                </div>
-
-                <div class="col-lg-6 text-center">
-                    <img th:src="@{/img/nosotros.png}"
-                         class="hero-img img-fluid"
-                         alt="Productos deportivos">
-                </div>
-
-            </div>
-        </section>
-
-        <!-- PRODUCTO DESTACADO -->
-        <section class="mb-5">
-            <div class="section-header text-center mb-4">
-                <h2 class="section-title">
-                    <i class="fa-solid fa-star me-2"></i>
-                    Producto Destacado
-                </h2>
-
-                <p class="section-text">
-                    Uno de los favoritos de nuestros clientes.
-                </p>
-            </div>
-
-            <div class="producto-destacado-card">
-
-                <div class="row align-items-center g-4">
-
-                    <div class="col-lg-5 text-center">
-                        <img th:src="@{/img/nosotros.png}"
-                             class="destacado-img img-fluid"
-                             alt="Producto destacado">
-                    </div>
-
-                    <div class="col-lg-7">
-
-                        <span class="badge bg-danger mb-2">TOP VENTAS</span>
-
-                        <h3 class="mb-3">Balón Profesional Elite</h3>
-
-                        <p class="text-muted">
-                            Diseñado para alto rendimiento, excelente agarre,
-                            resistencia superior y calidad profesional para
-                            entrenamientos y partidos oficiales.
-                        </p>
-
-                        <h4 class="precio-destacado">₡18,500</h4>
-
-                        <div class="mt-4 d-flex flex-wrap gap-2">
-                            <a th:href="@{/categorias}" class="btn btn-danger">
-                                Comprar Ahora
-                            </a>
-
-                            <a th:href="@{/categorias}" class="btn btn-outline-dark">
-                                Ver Más Productos
+                            <a th:href="@{/categorias}" class="btn btn-danger btn-lg mt-3">
+                                Ver Categorías
                             </a>
                         </div>
 
+                        <div class="col-lg-6 text-center">
+                            <img th:src="@{/img/rendimientoDeportivo.jpg}"
+                                 class="hero-img img-fluid"
+                                 alt="Productos deportivos">
+                        </div>
+
                     </div>
+                </section>
 
-                </div>
+                <!-- PRODUCTO DESTACADO -->
+                <section class="mb-5" th:if="${topProducto != null}">
+                    <div class="section-header text-center mb-4">
+                        <h2 class="section-title">
+                            <i class="fa-solid fa-star me-2"></i>
+                            Producto Destacado
+                        </h2>
 
-            </div>
-        </section>
-
-        <!-- BENEFICIOS -->
-        <section class="mb-5">
-
-            <div class="section-header text-center mb-4">
-                <h2 class="section-title">
-                    ¿Por qué comprar con nosotros?
-                </h2>
-            </div>
-
-            <div class="row g-4">
-
-                <div class="col-md-4">
-                    <div class="beneficio-card h-100">
-                        <i class="fa-solid fa-medal beneficio-icon"></i>
-                        <h5>Calidad Garantizada</h5>
-                        <p>
-                            Productos seleccionados para ofrecer
-                            durabilidad y excelente desempeño.
+                        <p class="section-text">
+                            El producto más comprado por nuestros clientes.
                         </p>
                     </div>
-                </div>
 
-                <div class="col-md-4">
-                    <div class="beneficio-card h-100">
-                        <i class="fa-solid fa-truck beneficio-icon"></i>
-                        <h5>Entrega Rápida</h5>
-                        <p>
-                            Opciones de envío y retiro en tienda
-                            para mayor comodidad.
-                        </p>
-                    </div>
-                </div>
+                    <div class="producto-destacado-card">
+                        <div class="row align-items-center g-4">
 
-                <div class="col-md-4">
-                    <div class="beneficio-card h-100">
-                        <i class="fa-solid fa-headset beneficio-icon"></i>
-                        <h5>Atención Personalizada</h5>
-                        <p>
-                            Nuestro equipo te ayuda a elegir
-                            el producto ideal.
-                        </p>
+                            <div class="col-lg-5 text-center">
+                                <img th:src="${topProducto.imagen != null ? topProducto.imagen : '/img/logo.png'}"
+                                     class="destacado-img img-fluid"
+                                     alt="Producto destacado">
+                            </div>
+
+                            <div class="col-lg-7">
+
+                                <span class="badge bg-danger mb-2">TOP VENTAS</span>
+
+                                <h3 class="mb-3" th:text="${topProducto.nombre}">
+                                    Producto destacado
+                                </h3>
+
+                                <p class="text-muted"
+                                   th:text="${topProducto.descripcion != null and !#strings.isEmpty(topProducto.descripcion) ? topProducto.descripcion : 'Producto destacado de nuestro catálogo.'}">
+                                    Descripción del producto
+                                </p>
+
+                                <h4 class="precio-destacado">
+                                    ₡<span th:text="${#numbers.formatDecimal(topProducto.precioUnitario,1,'COMMA',2,'POINT')}"></span>
+                                </h4>
+
+                                <p class="mt-2 text-muted">
+                                    Comprado
+                                    <strong th:text="${topProducto.vecesComprado}">0</strong>
+                                    veces
+                                </p>
+
+                                <div class="mt-4 d-flex flex-wrap gap-2">
+                                    <a th:href="@{/producto/detalle/{id}(id=${topProducto.idProducto})}" class="btn btn-danger">
+                                        Comprar Ahora
+                                    </a>
+
+                                    <a th:href="@{/categorias}" class="btn btn-outline-dark">
+                                        Ver Más Productos
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </section>
+                <section class="mb-5" th:if="${topProducto == null}">
+                    <div class="alert alert-light border text-center">
+                        Aún no hay productos destacados disponibles.
+                    </div>
+                </section>
+
+                <!-- BENEFICIOS -->
+                <section class="mb-5">
+
+                    <div class="section-header text-center mb-4">
+                        <h2 class="section-title">
+                            ¿Por qué comprar con nosotros?
+                        </h2>
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-4">
+                            <div class="beneficio-card h-100">
+                                <i class="fa-solid fa-medal beneficio-icon"></i>
+                                <h5>Calidad Garantizada</h5>
+                                <p>
+                                    Productos seleccionados para ofrecer
+                                    durabilidad y excelente desempeño.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="beneficio-card h-100">
+                                <i class="fa-solid fa-truck beneficio-icon"></i>
+                                <h5>Entrega Rápida</h5>
+                                <p>
+                                    Opciones de envío y retiro en tienda
+                                    para mayor comodidad.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="beneficio-card h-100">
+                                <i class="fa-solid fa-headset beneficio-icon"></i>
+                                <h5>Atención Personalizada</h5>
+                                <p>
+                                    Nuestro equipo te ayuda a elegir
+                                    el producto ideal.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- CTA -->
+                <section class="cta-box text-center">
+                    <h2 class="mb-3">¿Listo para entrenar mejor?</h2>
+
+                    <p class="mb-4">
+                        Descubre nuestras categorías y encuentra
+                        lo que necesitas hoy mismo.
+                    </p>
+
+                    <a th:href="@{/categorias}" class="btn btn-danger btn-lg">
+                        Explorar Productos
+                    </a>
+                </section>
 
             </div>
-        </section>
 
-        <!-- CTA -->
-        <section class="cta-box text-center">
-            <h2 class="mb-3">¿Listo para entrenar mejor?</h2>
+        </main>
 
-            <p class="mb-4">
-                Descubre nuestras categorías y encuentra
-                lo que necesitas hoy mismo.
-            </p>
+        <div th:replace="~{general/fragmentosGeneral :: footer}"></div>
 
-            <a th:href="@{/categorias}" class="btn btn-danger btn-lg">
-                Explorar Productos
-            </a>
-        </section>
+        <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
 
-    </div>
-
-</main>
-
-<div th:replace="~{general/fragmentosGeneral :: footer}"></div>
-
-<script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
-
-</body>
+    </body>
 </html>

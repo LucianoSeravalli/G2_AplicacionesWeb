@@ -605,3 +605,8 @@ body {
         height: 180px;
     }
 }
+
+.admin-table .badge {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+}

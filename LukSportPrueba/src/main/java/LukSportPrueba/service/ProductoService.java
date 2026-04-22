@@ -308,4 +308,24 @@ public class ProductoService {
         }
     }
 
+    public List<Producto> obtenerDestacados() {
+        try {
+            return productoRepository
+                    .findTop4ByActividadOrderByVecesCompradoDesc("activo");
+        } catch (Exception ex) {
+            System.out.println("Error al obtener destacados: " + ex.getMessage());
+            return List.of();
+        }
+    }
+
+    public Producto obtenerTop1Destacado() {
+        try {
+            return productoRepository
+                    .findTop1ByActividadOrderByVecesCompradoDesc("activo");
+        } catch (Exception ex) {
+            System.out.println("Error al obtener top 1 destacado: " + ex.getMessage());
+            return null;
+        }
+    }
+
 }
