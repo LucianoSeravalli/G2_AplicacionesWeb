@@ -310,4 +310,53 @@ public class UsuarioService {
         }
     }
 
+    public List<Usuario> buscarUsuariosPorNombreOCorreo(String criterio) {
+        try {
+            if (criterio == null || criterio.isBlank()) {
+                return List.of();
+            }
+
+            return usuarioRepository.findByNombreContainingIgnoreCaseOrCorreoContainingIgnoreCase(criterio, criterio);
+
+        } catch (Exception ex) {
+            System.out.println("Error al buscar usuarios: " + ex.getMessage());
+            ex.printStackTrace();
+            return List.of();
+        }
+    }
+
+    public String actualizarRolUsuario(Integer idUsuario, Integer idRol) {
+        try {
+            Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+            if (usuario == null) {
+                return "Usuario no encontrado.";
+            }
+
+            Rol rol = rolRepository.findById(idRol).orElse(null);
+            if (rol == null) {
+                return "Rol no encontrado.";
+            }
+
+            usuario.setRol(rol);
+            usuarioRepository.save(usuario);
+
+            return "ok";
+
+        } catch (Exception ex) {
+            System.out.println("Error al actualizar rol de usuario: " + ex.getMessage());
+            ex.printStackTrace();
+            return "Ocurrió un error al actualizar el rol.";
+        }
+    }
+
+    public List<Rol> listarRoles() {
+        try {
+            return rolRepository.findAll();
+        } catch (Exception ex) {
+            System.out.println("Error al listar roles: " + ex.getMessage());
+            ex.printStackTrace();
+            return List.of();
+        }
+    }
+
 }

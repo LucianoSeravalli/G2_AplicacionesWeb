@@ -1,0 +1,55 @@
+.error-box {
+    background: rgba(255,255,255,0.97);
+    border-radius: 26px;
+    padding: 60px 35px;
+    box-shadow: 0 14px 32px rgba(0,0,0,0.14);
+    max-width: 800px;
+    margin: auto;
+}
+
+.error-icon {
+    font-size: 70px;
+    color: #8b0000;
+    margin-bottom: 25px;
+}
+
+.error-title {
+    font-size: 42px;
+    font-weight: 800;
+    color: #8b0000;
+    margin-bottom: 18px;
+}
+
+.error-text {
+    font-size: 18px;
+    color: #555;
+    max-width: 620px;
+    margin: auto;
+    line-height: 1.8;
+}
+
+.error-buttons .btn {
+    margin: 8px;
+    min-width: 220px;
+    border-radius: 14px;
+    font-weight: 700;
+    padding: 12px 20px;
+}
+
+@media (max-width: 768px) {
+    .error-box {
+        padding: 35px 22px;
+    }
+
+    .error-title {
+        font-size: 32px;
+    }
+
+    .error-text {
+        font-size: 16px;
+    }
+
+    .error-icon {
+        font-size: 55px;
+    }
+}

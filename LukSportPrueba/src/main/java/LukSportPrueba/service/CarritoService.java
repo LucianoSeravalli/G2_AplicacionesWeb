@@ -274,6 +274,14 @@ public class CarritoService {
 
                 Producto producto = item.getProducto();
 
+                if (producto.getVecesComprado() == null) {
+                    producto.setVecesComprado(0);
+                }
+
+                producto.setVecesComprado(
+                        producto.getVecesComprado() + item.getCantidad()
+                );
+
                 int totalProducto = cantidadProductoTallaRepository
                         .findByProducto_IdProducto(producto.getIdProducto())
                         .stream()
@@ -460,6 +468,16 @@ public class CarritoService {
             System.out.println("Error al validar datos de pago: " + ex.getMessage());
             ex.printStackTrace();
             return "Ocurrió un error al validar los datos de pago.";
+        }
+    }
+
+    public List<Pedido> obtenerTodasLasTransacciones() {
+        try {
+            return pedidoRepository.findByEstadoOrderByIdPedidoDesc("realizado");
+        } catch (Exception ex) {
+            System.out.println("Error al obtener transacciones: " + ex.getMessage());
+            ex.printStackTrace();
+            return List.of();
         }
     }
 

@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
 
-    Optional<Pedido> findByUsuario_IdUsuarioAndEstado(Integer idUsuario, String estado);
+    public Optional<Pedido> findByUsuario_IdUsuarioAndEstado(Integer idUsuario, String estado);
 
-    List<Pedido> findByUsuario_IdUsuarioAndEstadoOrderByIdPedidoDesc(Integer idUsuario, String estado);
+    public List<Pedido> findByUsuario_IdUsuarioAndEstadoOrderByIdPedidoDesc(Integer idUsuario, String estado);
 
-    Optional<Pedido> findByIdPedidoAndUsuario_IdUsuario(Integer idPedido, Integer idUsuario);
+    public Optional<Pedido> findByIdPedidoAndUsuario_IdUsuario(Integer idPedido, Integer idUsuario);
+    
+    public List<Pedido> findByEstadoOrderByIdPedidoDesc(String estado);
 }
