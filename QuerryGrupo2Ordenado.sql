@@ -45,7 +45,7 @@ ADD COLUMN Activo BOOLEAN DEFAULT FALSE,
 ADD COLUMN TokenVerificacion VARCHAR(255),
 ADD COLUMN FechaExpiracionToken DATETIME;
 
-
+select * from usuario;
 -- =========================
 -- TABLA PRODUCTO
 -- =========================
@@ -64,7 +64,10 @@ CREATE TABLE Producto (
 
 ALTER TABLE Producto
 ADD COLUMN Actividad ENUM('activo', 'inactivo') NOT NULL DEFAULT 'inactivo',
-ADD COLUMN TieneTalla boolean;
+ADD COLUMN TieneTalla boolean,
+ADD COLUMN VecesComprado INT NOT NULL DEFAULT 0;
+
+select * from producto;
 
 -- =========================
 -- TABLA PEDIDOS
@@ -79,6 +82,40 @@ CREATE TABLE Pedidos (
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 ) ENGINE=InnoDB;
+
+ALTER TABLE Pedidos
+ADD COLUMN Estado ENUM('carrito', 'realizado', 'cancelado') NOT NULL DEFAULT 'carrito',
+ADD COLUMN Fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE Pedidos
+ADD COLUMN TipoEntrega ENUM('paqueteria', 'retiro_tienda') NULL;
+
+select * from pedidos;
+
+-- =========================
+-- TABLA PEDIDOSXPRODUCTO
+-- =========================
+CREATE TABLE PedidosXProducto (
+    idPedidosXProducto INT AUTO_INCREMENT PRIMARY KEY,
+    idPedidos INT NOT NULL,
+    idProductos INT NOT NULL,
+    Cantidad INT NOT NULL DEFAULT 1,
+    CONSTRAINT fk_pxp_pedido
+        FOREIGN KEY (idPedidos) REFERENCES Pedidos(idPedido)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_pxp_producto
+        FOREIGN KEY (idProductos) REFERENCES Producto(IdProducto)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
+ALTER TABLE PedidosXProducto
+ADD COLUMN idTalla INT NULL,
+ADD CONSTRAINT fk_pxp_talla
+FOREIGN KEY (idTalla) REFERENCES TallasProducto(IdTalla);
+
+select * from PedidosXProducto;
 
 -- =========================
 -- TABLA TallasProducto
@@ -110,3 +147,5 @@ CREATE TABLE CantidadProductoTalla (
     CONSTRAINT fk_producto_talla_talla
         FOREIGN KEY (IdTalla) REFERENCES TallasProducto(IdTalla)
 );
+
+select * from CantidadProductoTalla;

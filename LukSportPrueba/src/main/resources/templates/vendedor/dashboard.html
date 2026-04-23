@@ -182,9 +182,9 @@
                                                             <label class="form-label">Talla</label>
                                                             <select class="form-select" name="idTalla" required>
                                                                 <option value="">Seleccione una talla</option>
-                                                                <option th:each="item : ${inventarioTallas}"
-                                                                        th:value="${item.talla.idTalla}"
-                                                                        th:text="${item.talla.nombreTalla + ' - Disponibles: ' + item.existencia}">
+                                                                <option th:each="talla : ${tallas}"
+                                                                        th:value="${talla.idTalla}"
+                                                                        th:text="${talla.nombreTalla}">
                                                                 </option>
                                                             </select>
                                                         </div>
