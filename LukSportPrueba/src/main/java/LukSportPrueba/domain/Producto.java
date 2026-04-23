@@ -47,5 +47,5 @@ public class Producto {
     private List<CantidadProductoTalla> tallas;
 
     @Column(name = "VecesComprado")
-    private Integer vecesComprado;
+    private Integer vecesComprado = 0;
 }
